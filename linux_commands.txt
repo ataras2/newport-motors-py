@@ -1,0 +1,22 @@
+- list all the USB devices 
+ls -al /dev/tty* | grep USB
+
+- edit the USB rules file
+sudo gedit  /etc/udev/rules.d/99-usb-serial.rules
+
+- reset USB connections/rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+
+- get info from bus
+udevadm info  /dev/bus/usb/003/010
+
+- live usb updates
+dmesg -wH
+
+- list usb
+lsusb
+
+- get information about a device and filter
+TTYDEVICE="bus/usb/003/010" ; sudo echo -e "$(udevadm info -a -n /dev/${TTYDEVICE} | grep ATTRS{idVendor}) \n$(udevadm info -a -n /dev/${TTYDEVICE} | grep ATTRS{idProduct}) \n$(udevadm info -a -n /dev/${TTYDEVICE} | grep ATTRS{serial}) \n
+
+
