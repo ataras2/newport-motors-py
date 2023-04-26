@@ -17,6 +17,10 @@ import glob
 #         pass
 # print(result)
 # exit()
-serial = serial.Serial(port='/dev/ttyUSB1',baudrate=921600,bytesize=8,parity='N',stopbits=1,xonxoff=True, timeout=3)
+import serial.tools.list_ports
+print(serial.tools.list_ports.comports())
+# exit()
+serial = serial.Serial(port='/dev/ttyUSB0',baudrate=921600,bytesize=8,parity='N',stopbits=1,xonxoff=True, timeout=3)
+exit()
 serial.write('01PA?'.encode('ascii'))
 print(serial.read_until(b'\r\n'))

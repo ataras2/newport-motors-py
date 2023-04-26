@@ -6,7 +6,7 @@ import pyvisa
 rm = pyvisa.ResourceManager()
 print(rm.list_resources())
 # exit()
-inst = rm.open_resource('ASRL/dev/ttyUSB3::INSTR',
+inst = rm.open_resource('ASRL/dev/ttyUSB0::INSTR',
                         baud_rate=921600, 
                         write_termination='\r\n',
                         read_termination='\r\n')
