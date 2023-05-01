@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# TODO: make min, max, step consistent and easy to interface
+# TODO: Add axes labels, titles
+# TODO: add tip/tilt scatter with colours going backwards in time
+
+
 st.set_page_config(layout="wide")
 
 st.title('Motor control for Heimdallr')
@@ -45,6 +50,8 @@ with col1:
                             max_value = 5,
                             step = 1,
                             key = 'slider', on_change= update_numin)
+    
+    st.line_chart(np.random.randn(20, 1))
 #    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror"])
 
 
