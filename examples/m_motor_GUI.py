@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from newport_motors.GUI.custom_numeric import CustomNumeric
+
+
 # TODO: make min, max, step consistent and easy to interface
 # TODO: Add axes labels, titles
 # TODO: add tip/tilt scatter with colours going backwards in time
@@ -16,6 +19,7 @@ st.title('Motor control for Heimdallr')
 # def on_item_change():
 #    print(f"Changing internals to {component}{beam}")
 
+CustomNumeric.variable_increment_numeric()
 
 col1, col2 = st.columns(2)
 
