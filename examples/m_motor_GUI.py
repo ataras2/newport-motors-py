@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-from newport_motors.GUI.custom_numeric import CustomNumeric
+from newport_motors.GUI.CustomNumeric import CustomNumeric
+from newport_motors.GUI.InstrumentGUI import InstrumentGUI
 
 
 # TODO: make min, max, step consistent and easy to interface
@@ -19,18 +20,21 @@ st.title('Motor control for Heimdallr')
 # def on_item_change():
 #    print(f"Changing internals to {component}{beam}")
 
-CustomNumeric.variable_increment_numeric()
+
 
 col1, col2 = st.columns(2)
 
 with col1:
-    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror"])
+    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror"], key="component")
 
 with col2:
-    beam = st.selectbox("Pick a component", list(range(1,5)))
+    beam = st.selectbox("Pick a component", list(range(1,5)), key="beam")
+
+CustomNumeric.variable_increment(InstrumentGUI.get_update_fn())
 
 st.write(f"Currently looking at {component}, beam {beam}")
 
+print(f"sending to {component}{beam} with command to step to {st.session_state.x}")
 
 
 col1, col2 = st.columns(2)
