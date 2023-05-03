@@ -5,7 +5,7 @@ if 'x' not in st.session_state:
     st.session_state['x'] = 0
 
 
-inc = st.number_input('Step size', value=0, key='increment', step=1)
+inc = st.number_input('Step size', value=0, min_value=0, key='increment', step=1)
 
 x = st.number_input('x', value=st.session_state['x'], key='x', step = inc)
 
