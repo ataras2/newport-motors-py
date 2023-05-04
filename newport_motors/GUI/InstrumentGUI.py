@@ -1,5 +1,5 @@
 import streamlit as st
-
+from newport_motors.Motors.motor import M100D
 
 class InstrumentGUI:
     def create_GUI():
@@ -14,4 +14,6 @@ class InstrumentGUI:
         a = 2
         def fn():
             print(f"sending {st.session_state.x} to {st.session_state.component} (a={a})")
+            print(st.session_state['motor'].read_pos(M100D.AXES.U))
+            st.session_state.motor.set_absolute_position(st.session_state.x, M100D.AXES.U)
         return fn

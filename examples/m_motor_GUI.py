@@ -4,6 +4,7 @@ import numpy as np
 
 from newport_motors.GUI.CustomNumeric import CustomNumeric
 from newport_motors.GUI.InstrumentGUI import InstrumentGUI
+from newport_motors.Motors.motor import M100D
 
 
 # TODO: make min, max, step consistent and easy to interface
@@ -20,6 +21,9 @@ st.title('Motor control for Heimdallr')
 # def on_item_change():
 #    print(f"Changing internals to {component}{beam}")
 
+if 'motor' not in st.session_state:
+    import pyvisa
+    st.session_state['motor'] = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager())
 
 
 col1, col2 = st.columns(2)
@@ -30,7 +34,6 @@ with col1:
 with col2:
     beam = st.selectbox("Pick a component", list(range(1,5)), key="beam")
 
-CustomNumeric.variable_increment(InstrumentGUI.get_update_fn())
 
 st.write(f"Currently looking at {component}, beam {beam}")
 
@@ -63,6 +66,7 @@ with col1:
 
 def TipTiltMotor():
     st.header("Tip/Tilt motor")
+    CustomNumeric.variable_increment('x',InstrumentGUI.get_update_fn('x'))
     
 
 with col2:
