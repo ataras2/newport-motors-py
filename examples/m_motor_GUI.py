@@ -66,7 +66,8 @@ with col1:
 
 def TipTiltMotor():
     st.header("Tip/Tilt motor")
-    CustomNumeric.variable_increment('x',InstrumentGUI.get_update_fn('x'))
+    CustomNumeric.variable_increment(['x', 'y'],
+                                     [InstrumentGUI.get_update_fn('x'), InstrumentGUI.get_update_fn('y')])
     
 
 with col2:
