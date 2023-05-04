@@ -25,7 +25,7 @@ st.title('Motor control for Heimdallr')
 col1, col2 = st.columns(2)
 
 with col1:
-    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror"], key="component")
+    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror","Knife edge"], key="component")
 
 with col2:
     beam = st.selectbox("Pick a component", list(range(1,5)), key="beam")
@@ -33,8 +33,6 @@ with col2:
 CustomNumeric.variable_increment(InstrumentGUI.get_update_fn())
 
 st.write(f"Currently looking at {component}, beam {beam}")
-
-print(f"sending to {component}{beam} with command to step to {st.session_state.x}")
 
 
 col1, col2 = st.columns(2)
@@ -65,37 +63,7 @@ with col1:
 
 def TipTiltMotor():
     st.header("Tip/Tilt motor")
-    def update_slider():
-        st.session_state.tip_tilt_x_slider = st.session_state.tip_tilt_x_num
-    def update_numin():
-        st.session_state.tip_tilt_x_num = st.session_state.tip_tilt_x_slider      
-
-    ccol1, ccol2 = st.columns(2)
-    with ccol1:
-        val = st.number_input('X (deg)', value = 0, key='tip_tilt_x_num', on_change = update_slider)
-
-    with ccol2:
-        slider_value = st.slider('X (deg)', min_value = 0, 
-                            value = val, 
-                            max_value = 5, 
-                            key='tip_tilt_x_slider',
-                            step = 1, on_change= update_numin)
     
-    def update_slider():
-        st.session_state.tip_tilt_y_slider = st.session_state.tip_tilt_y_num
-    def update_numin():
-        st.session_state.tip_tilt_y_num = st.session_state.tip_tilt_y_slider 
-
-    ccol1, ccol2 = st.columns(2)
-    with ccol1:
-        val = st.number_input('Y (deg)', value = 0, key='tip_tilt_y_num', on_change = update_slider)
-
-    with ccol2:
-        slider_value = st.slider('Y (deg)', min_value = 0, 
-                            value = val, 
-                            max_value = 5,
-                            key='tip_tilt_y_slider',
-                            step = 1, on_change= update_numin)
 
 with col2:
     TipTiltMotor()
