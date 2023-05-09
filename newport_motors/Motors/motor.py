@@ -35,8 +35,8 @@ class M100D(Motor):
             self.AXES.V : 0.0 
         }
 
-    @property
-    def current_pos(self):
+    
+    def get_current_pos(self):
         return [self._current_pos[ax] for ax in M100D.AXES]
 
     def set_to_zero(self):
@@ -69,6 +69,7 @@ class M100D(Motor):
         """
         self._connection.write(f'1PA{axis.name}{value}')
         self._current_pos[axis] = value
+        print(f'running set abs pos, is now {self._current_pos}')
 
 
 if __name__ == "__main__":

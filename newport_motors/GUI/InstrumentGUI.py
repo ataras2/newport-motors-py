@@ -5,7 +5,7 @@ class InstrumentGUI:
     def create_GUI():
         pass
 
-    def get_update_fn(source) -> callable:
+    def get_update_fn(source, motor_key) -> callable:
         # whenever a value of the desired state changes, this function will be used as the callback. 
         # the input `source` will give information as to the reason for the callback and this function 
         # shall create the correct callable
@@ -20,5 +20,5 @@ class InstrumentGUI:
         def fn():
             print(f"sending {st.session_state[source]} to {st.session_state.component}")
             # print(st.session_state['motor'].read_pos(M100D.AXES.U))
-            st.session_state['motor'].set_absolute_position(st.session_state[source], axis)
+            st.session_state[motor_key].set_absolute_position(st.session_state[source], axis)
         return fn

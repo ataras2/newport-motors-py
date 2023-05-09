@@ -1,10 +1,12 @@
 import streamlit as st
 
 class CustomNumeric:
-    def variable_increment(keys : list[str], callback_fns : list[callable]):
-        for key in keys:
-            if key not in st.session_state:
-                st.session_state[key] = 0.
+    def variable_increment(keys : list[str], 
+                           callback_fns : list[callable],
+                           values : list[float]):
+        # for key in keys:
+        #     if key not in st.session_state:
+        #         st.session_state[key] = 0.
 
 
         inc = st.number_input('Step size', 
@@ -14,9 +16,9 @@ class CustomNumeric:
                               key='increment', 
                               step=0.005,
                               format="%.3f")
-        for c_fn, key in zip(callback_fns, keys):
+        for c_fn, key, v in zip(callback_fns, keys, values):
             st.number_input(key, 
-                            value=st.session_state[key], 
+                            value=v, 
                             min_value=-0.75, 
                             max_value=0.75, 
                             key=key, 

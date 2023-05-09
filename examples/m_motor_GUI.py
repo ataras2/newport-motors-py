@@ -17,9 +17,10 @@ st.set_page_config(layout="wide")
 st.title('Motor control for Heimdallr')
 
 
-if 'motor' not in st.session_state:
+if 'motor1' not in st.session_state:
     import pyvisa
-    st.session_state['motor'] = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager())
+    st.session_state['motor1'] = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager())
+    st.session_state['motor2'] = M100D('ASRL/dev/ttyUSB1::INSTR', pyvisa.ResourceManager())
 
 
 col1, col2 = st.columns(2)
@@ -32,6 +33,11 @@ with col2:
 
 
 st.write(f"Currently looking at {component}, beam {beam}")
+
+if beam > 1:
+    motor_key = 'motor2'
+else:
+    motor_key = 'motor1'
 
 
 col1, col2 = st.columns(2)
@@ -63,8 +69,10 @@ with col1:
 def TipTiltMotor():
     st.header("Tip/Tilt motor")
     CustomNumeric.variable_increment(['x', 'y'],
-                                     [InstrumentGUI.get_update_fn('x'), InstrumentGUI.get_update_fn('y')])
+                                     [InstrumentGUI.get_update_fn('x', motor_key), InstrumentGUI.get_update_fn('y', motor_key)],
+                                     st.session_state[motor_key].get_current_pos())
     
+
 
 with col2:
     TipTiltMotor()
