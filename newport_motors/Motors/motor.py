@@ -1,5 +1,6 @@
 import pyvisa
 from enum import Enum
+import parse
 
 class Motor:
     # the values for the newport motors:
@@ -34,6 +35,10 @@ class M100D(Motor):
             self.AXES.V : 0.0 
         }
 
+    @property
+    def current_pos(self):
+        return [self._current_pos[ax] for ax in M100D.AXES]
+
     def set_to_zero(self):
         """
         Set all the motor axes positions to zero
@@ -51,7 +56,8 @@ class M100D(Motor):
         Returns:
             position (float) : the position of the axis in degrees
         """
-        return self._connection.query(f'1TP{axis.name}').strip()
+        return_str = self._connection.query(f'1TP{axis.name}').strip()
+        return float(parse.parse('{}TPU{}',return_str)[1])
 
     def set_absolute_position(self, value : float, axis: AXES):
         """
@@ -72,5 +78,5 @@ if __name__ == "__main__":
     tt = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager())
     print(tt.AXES.U.name)
     print(tt.read_pos(tt.AXES.U))
-    tt.set_absolute_position(0.7, tt.AXES.U)
+    tt.set_absolute_position(0., tt.AXES.U)
     print(tt.read_pos(tt.AXES.U))
