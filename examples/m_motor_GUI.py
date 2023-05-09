@@ -7,7 +7,7 @@ from newport_motors.GUI.InstrumentGUI import InstrumentGUI
 from newport_motors.Motors.motor import M100D
 
 
-# TODO: make min, max, step consistent and easy to interface
+# TODO: have persistence when dropdowns are changed
 # TODO: Add axes labels, titles
 # TODO: add tip/tilt scatter with colours going backwards in time
 
@@ -16,10 +16,6 @@ st.set_page_config(layout="wide")
 
 st.title('Motor control for Heimdallr')
 
-# # error here, on change uses the previous value of component or beam 
-# # i.e. the call back occurs before beam assignment...
-# def on_item_change():
-#    print(f"Changing internals to {component}{beam}")
 
 if 'motor' not in st.session_state:
     import pyvisa
@@ -60,7 +56,7 @@ with col1:
                             step = 1,
                             key = 'slider', on_change= update_numin)
     
-    st.line_chart(np.random.randn(20, 1))
+    # st.line_chart(np.random.randn(20, 1))
 #    component = st.selectbox("Pick a component", ["OAP1","Spherical mirror"])
 
 
