@@ -72,25 +72,21 @@ def TipTiltMotor():
                                      [InstrumentGUI.get_update_fn('x', motor_key), InstrumentGUI.get_update_fn('y', motor_key)],
                                      st.session_state[motor_key].get_current_pos())
     pos = st.session_state[motor_key].get_current_pos()
-    with st.echo(code_location='below'):
-        import matplotlib.pyplot as plt
 
-        fig = plt.figure()
-        ax = fig.add_subplot(1,1,1)
+    import plotly.express as px
 
-        ax.scatter(
-            np.array([pos[0]]),
-            np.array([pos[1]]),
-        )
+    fig = px.scatter(
+        x=np.array([pos[0]]),
+        y=np.array([pos[1]]),
+    )
+    fig.update_layout(
+        xaxis_title="x",
+        yaxis_title="y",
+        yaxis = dict(range=st.session_state[motor_key].BOUNDS[M100D.AXES.V]),
+        xaxis = dict(range=st.session_state[motor_key].BOUNDS[M100D.AXES.U])
+    )
 
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-
-        ax.set_xlim(st.session_state[motor_key].BOUNDS[M100D.AXES.U])
-        ax.set_ylim(st.session_state[motor_key].BOUNDS[M100D.AXES.V])
-
-        st.write(fig)
-
+    st.write(fig)
 
 
 with col2:
