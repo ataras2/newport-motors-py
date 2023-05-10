@@ -11,23 +11,11 @@ import pyvisa
 # TODO: Add axes labels, titles
 # TODO: add tip/tilt scatter with colours going backwards in time
 
+
+
 run_in_sim = True
 
-if run_in_sim:
-    from newport_motors.Mocks.motor import Mock_M100D
-    from visa_mock.base.register import register_resource
 
-    motor1_port = 'MOCK0::mock1::INSTR'
-    motor2_port = 'MOCK0::mock2::INSTR'
-
-    register_resource(motor1_port, Mock_M100D())
-    register_resource(motor2_port, Mock_M100D())
-
-    rm = pyvisa.ResourceManager(visa_library="@mock")
-else:
-    motor1_port = 'ASRL/dev/ttyUSB0::INSTR'
-    motor2_port = 'ASRL/dev/ttyUSB1::INSTR'
-    rm = pyvisa.ResourceManager()
 
 st.set_page_config(layout="wide")
 
@@ -35,9 +23,27 @@ st.title('Motor control for Heimdallr')
 
 
 if 'motor1' not in st.session_state:
+    if run_in_sim:
+        from newport_motors.Mocks.motor import Mock_M100D
+        from visa_mock.base.register import register_resource
+
+        motor1_port = 'MOCK0::mock1::INSTR'
+        motor2_port = 'MOCK0::mock2::INSTR'
+
+        register_resource(motor1_port, Mock_M100D())
+        register_resource(motor2_port, Mock_M100D())
+
+        rm = pyvisa.ResourceManager(visa_library="@mock")
+    else:
+        motor1_port = 'ASRL/dev/ttyUSB0::INSTR'
+        motor2_port = 'ASRL/dev/ttyUSB1::INSTR'
+        rm = pyvisa.ResourceManager()
+
+
     st.session_state['motor1'] = M100D(motor1_port, rm)
     st.session_state['motor2'] = M100D(motor2_port, rm)
 
+st.session_state['motor1'].set_absolute_position(0.02, M100D.AXES.U)
 
 col1, col2 = st.columns(2)
 

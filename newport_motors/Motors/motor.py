@@ -67,7 +67,9 @@ class M100D(Motor):
             value (float) : The new position in degrees
             axis (M100D.AXES) : the axis to set
         """
-        self._connection.write(f'1PA{axis.name}{value}')
+        str_to_write = f'1PA{axis.name}{value}'
+        print("sending", str_to_write)
+        self._connection.write(str_to_write)
         self._current_pos[axis] = value
         print(f'running set abs pos, is now {self._current_pos}')
 
