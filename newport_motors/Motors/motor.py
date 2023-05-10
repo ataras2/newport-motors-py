@@ -10,6 +10,7 @@ class Motor:
     def __init__(self, serial_port : str, rm : pyvisa.ResourceManager):
         self._serial_port = serial_port
         self.open_connection(rm)
+        self._verify_valid_connection()
     
     def open_connection(self, rm : pyvisa.ResourceManager):
         """
@@ -19,6 +20,9 @@ class Motor:
                                             baud_rate=self.SERIAL_BAUD, 
                                             write_termination=self.SERIAL_TERMIN,
                                             read_termination=self.SERIAL_TERMIN)
+    
+    def _verify_valid_connection(self):
+        raise NotImplementedError()
 
 
 class M100D(Motor):
@@ -35,6 +39,9 @@ class M100D(Motor):
             self.AXES.V : 0.0 
         }
 
+    def _verify_valid_connection(self):
+        id = self._connection.query('1ID?').strip()
+        assert 'M100D' in id
     
     def get_current_pos(self):
         return [self._current_pos[ax] for ax in M100D.AXES]
