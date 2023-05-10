@@ -6,3 +6,5 @@ sudo gedit /sys/bus/usb-serial/drivers/ftdi_sio/new_id
 add in "<idVendor> <idProduct>"
 
 notes about automation: https://unix.stackexchange.com/questions/67936/attaching-usb-serial-device-with-custom-pid-to-ttyusb0-on-embedded/165845
+
+to run usb test as sudo: sudo env "PATH=$PATH" python <enter python command>
