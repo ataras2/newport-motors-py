@@ -9,4 +9,5 @@ devices:
     dialogues:
       - q: "*IDN?"
         r: "QCoDeS, Weinschel 8320 (Simulated), 1337, 0.0.01"
+      - q: "01TPU"
 

@@ -52,3 +52,4 @@ res.write(":INSTR:CHANNEL1:VOLT 2.3")
 reply = res.query(":INSTR:CHA1:VOLT?")  # This should return '2.3'
 reply = res.query(":instrument:channel1:voltage?") # We can either use the short form or the long form
 
+print(reply)
