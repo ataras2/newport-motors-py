@@ -5,7 +5,7 @@ Who tests the tester?
 from visa_mock.base.register import register_resource
 from pyvisa import ResourceManager
 
-from Mockers import Mock_M100D
+from newport_motors.Mocks.motor import Mock_M100D
 
 class Test_Mock_M100D:
     def test_nothing(self):
