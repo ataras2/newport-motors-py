@@ -1,0 +1,6 @@
+spec: "1.0"
+
+resources:
+  GPIB::1::INSTR:
+    device: M100D
+    filename: M100D.yaml
