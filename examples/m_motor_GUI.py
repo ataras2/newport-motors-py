@@ -11,7 +11,12 @@ import pyvisa
 # TODO: Add axes labels, titles
 # TODO: add tip/tilt scatter with colours going backwards in time
 
+import logging
 
+logging.basicConfig(filename='example.log', 
+                    encoding='utf-8', 
+                    level=logging.DEBUG,
+                    format='%(filename)s:%(levelname)s:%(message)s')
 
 run_in_sim = True
 

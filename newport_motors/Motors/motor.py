@@ -1,6 +1,8 @@
 import pyvisa
 from enum import Enum
 import parse
+import logging
+
 
 class Motor:
     # The serial config for the newport motors:
@@ -83,6 +85,7 @@ class M100D(Motor):
         """
         str_to_write = f'1PA{axis.name}{value}'
         print("sending", str_to_write)
+        logging.info("test")
         self._connection.write(str_to_write)
         self._current_pos[axis] = value
         print(f'running set abs pos, is now {self._current_pos}')
