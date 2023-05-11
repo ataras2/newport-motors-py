@@ -16,7 +16,7 @@ class Test_M100D:
         pass
 
     def test_ctor(self):
-        M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@mock"))
+        M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
 
 
 

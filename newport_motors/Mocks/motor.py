@@ -25,6 +25,10 @@ class Mock_M100D(MotorMocker):
         """
         return "Mocker,testing,00000,0.01"
     
+    @scpi("<address>ID?")
+    def get_abs_pos(self, address : int) -> str: 
+        return "M100D"
+    
     @scpi("<address>TP<axis>")
     def get_abs_pos(self, address : int, axis : str) -> str: 
         return 0.01

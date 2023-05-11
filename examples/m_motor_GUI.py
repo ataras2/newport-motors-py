@@ -33,11 +33,11 @@ if 'motor1' not in st.session_state:
         register_resource(motor1_port, Mock_M100D())
         register_resource(motor2_port, Mock_M100D())
 
-        rm = pyvisa.ResourceManager(visa_library="@mock")
+        rm = pyvisa.ResourceManager(visa_library="@-mock")
     else:
         motor1_port = 'ASRL/dev/ttyUSB0::INSTR'
         motor2_port = 'ASRL/dev/ttyUSB1::INSTR'
-        rm = pyvisa.ResourceManager()
+        rm = pyvisa.ResourceManager(visa_library="@-py")
 
 
     st.session_state['motor1'] = M100D(motor1_port, rm)

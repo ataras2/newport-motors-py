@@ -30,7 +30,7 @@ class Mocker(BaseMocker):
 
 register_resource("MOCK0::mock1::INSTR", Mocker())
 
-rc = ResourceManager(visa_library="@mock")
+rc = ResourceManager(visa_library="@-mock")
 res = rc.open_resource("MOCK0::mock1::INSTR")
 reply = res.query("*IDN?")  
 print(reply)

@@ -14,7 +14,7 @@ class Test_Mock_M100D:
     def _setup_mocks():
         register_resource("MOCK0::mock1::INSTR", Mock_M100D())
 
-        rc = ResourceManager(visa_library="@mock")
+        rc = ResourceManager(visa_library="@-mock")
         res = rc.open_resource("MOCK0::mock1::INSTR")
         return res
 
