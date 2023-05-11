@@ -31,7 +31,7 @@ class Mock_M100D(MotorMocker):
     
     @scpi("<address>TP<axis>")
     def get_abs_pos(self, address : int, axis : str) -> str: 
-        return 0.01
+        return f'{address}TP{axis}0.01'
     
     @scpi("<address>PAU<value>")
     def set_abs_pos_u(self, address : int, value : float) -> str: 
