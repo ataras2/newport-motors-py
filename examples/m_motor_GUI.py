@@ -13,7 +13,13 @@ import pyvisa
 
 import logging
 
-logging.basicConfig(filename='example.log', 
+from datetime import datetime
+import os
+
+now = datetime.now() # current date and time
+fname = now.strftime("%m_%d_%Y_%H_%M_%S")
+
+logging.basicConfig(filename=os.path.join('logs/', fname+".log"), 
                     encoding='utf-8', 
                     level=logging.DEBUG,
                     format='%(filename)s:%(levelname)s:%(message)s')
