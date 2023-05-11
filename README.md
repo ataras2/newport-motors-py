@@ -1,5 +1,12 @@
 # newport_motors
 
+## Linux connection issues
+Newport devices did not natively show on ttyUSB* for me. 
+Run the following, replacing product id if needed for different products
+```
+sudo modprobe ftdi_sio vendor=0x104d:3008 product=3008
+sudo sh -c 'echo "104d 3008" > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'
+```
 
 ## Sim mode:
 Uses https://github.com/microsoft/pyvisa-mock
