@@ -44,7 +44,11 @@ setuptools.setup(
     },
     
     # package_dir={"": "src"},
-    packages=["newport_motors", "newport_motors/GUI", "newport_motors/Motors", "newport_motors/Mocks"],
+    packages=["newport_motors", 
+              "newport_motors/GUI", 
+              "newport_motors/Motors", 
+              "newport_motors/Mocks", 
+              "newport_motors/USBs"],
     
     install_requires=install_requires,
     
