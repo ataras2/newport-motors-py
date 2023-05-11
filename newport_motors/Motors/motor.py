@@ -3,7 +3,7 @@ from enum import Enum
 import parse
 
 class Motor:
-    # the values for the newport motors:
+    # The serial config for the newport motors:
     SERIAL_BAUD = 921600
     SERIAL_TERMIN = '\r\n'
 
@@ -27,7 +27,7 @@ class Motor:
 
 class M100D(Motor):
     AXES = Enum('AXES', ['U', 'V'])
-    BOUNDS = {
+    HW_BOUNDS = {
         AXES.U : [-0.75, 0.75],
         AXES.V : [-0.75, 0.75]
     }
@@ -79,6 +79,16 @@ class M100D(Motor):
         self._connection.write(str_to_write)
         self._current_pos[axis] = value
         print(f'running set abs pos, is now {self._current_pos}')
+
+
+class LS16P(Motor):
+    def __init__(self, serial_port: str, rm: pyvisa.ResourceManager):
+        super().__init__(serial_port, rm)
+
+    def _verify_valid_connection(self):
+        id = self._connection.query('1ID?').strip()
+        assert 'LS16P' in id
+
 
 
 if __name__ == "__main__":

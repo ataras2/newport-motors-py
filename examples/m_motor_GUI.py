@@ -104,8 +104,8 @@ def TipTiltMotor():
     fig.update_layout(
         xaxis_title="x",
         yaxis_title="y",
-        yaxis = dict(range=st.session_state[motor_key].BOUNDS[M100D.AXES.V]),
-        xaxis = dict(range=st.session_state[motor_key].BOUNDS[M100D.AXES.U])
+        yaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V]),
+        xaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U])
     )
 
     st.write(fig)
