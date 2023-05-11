@@ -34,3 +34,7 @@ class Test_Mock_LS16P:
     def test_id(self):
         id_str = LS16P_resource.query("1ID?")
         assert "LS16P" in id_str
+        
+    def test_get_abs_pos(self):       
+        # check that the return can be converted to a float
+        reply = float(M100D_resource.query("1TPU"))

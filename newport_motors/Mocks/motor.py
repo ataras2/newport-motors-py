@@ -60,6 +60,6 @@ class Mock_LS16P(MotorMocker):
     def get_abs_pos(self, address : int, axis : str) -> str: 
         return 0.0
     
-    @scpi("<address>PAU<value>")
-    def set_abs_pos_u(self, address : int, value : float) -> str: 
+    @scpi("<address>PA<value>")
+    def set_abs_pos(self, address : int, value : float) -> str: 
         pass
