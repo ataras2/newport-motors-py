@@ -8,6 +8,15 @@ sudo modprobe ftdi_sio vendor=0x104d:3008 product=3008
 sudo sh -c 'echo "104d 3008" > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'
 ```
 
+You can also automated this by altering `~/.bashrc`:
+```
+# newport motors
+if [ ! -d "/sys/bus/usb-serial/drivers/ftdi_sio" ]; then
+   sudo modprobe ftdi_sio vendor=0x104d:3008 product=3008
+   sudo sh -c 'echo "104d 3008" > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'
+fi
+```
+
 ## Sim mode:
 Uses https://github.com/microsoft/pyvisa-mock
 
