@@ -26,7 +26,7 @@ class Mock_M100D(MotorMocker):
         return "Mocker,testing,00000,0.01"
     
     @scpi("<address>ID?")
-    def get_abs_pos(self, address : int) -> str: 
+    def getID(self, address : int) -> str: 
         return "M100D"
     
     @scpi("<address>TP<axis>")
@@ -39,4 +39,27 @@ class Mock_M100D(MotorMocker):
 
     @scpi("<address>PAV<value>")
     def set_abs_pos_v(self, address : int, value : float) -> str: 
+        pass
+
+
+class Mock_LS16P(MotorMocker):
+    """
+    Command set taken from 
+    https://www.newport.com/mam/celum/celum_assets/resources/Super_Agilis_-_User_s_Manual.pdf?3
+    """
+
+    def __init__(self, call_delay: float = 0.0):
+        super().__init__(call_delay=call_delay)
+
+
+    @scpi("<address>ID?")
+    def getID(self, address : int) -> str: 
+        return "LS16P"
+    
+    @scpi("<address>TP")
+    def get_abs_pos(self, address : int, axis : str) -> str: 
+        return 0.0
+    
+    @scpi("<address>PAU<value>")
+    def set_abs_pos_u(self, address : int, value : float) -> str: 
         pass
