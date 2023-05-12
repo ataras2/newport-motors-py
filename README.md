@@ -1,5 +1,12 @@
 # newport_motors
 
+## Purpose
+This repo contains code used to drive a large project with many newport motors. It is split into the following sub modules:
+ - GUI: generic GUI code using `streamlit` that works well with motor alignment projects
+ - Mocks: Mock (i.e. simulated) versions of the motors as serial objects, useful for protoyping code before motors ship
+ - Motors: Motor driving code for different kinds of newport motors
+ - USBs: usb managment code, used to scan USB ports and identify products from a particular manufacturer
+
 ## Linux connection issues
 Newport devices did not natively show on ttyUSB* for me. 
 Run the following, replacing product id if needed for different products
