@@ -32,15 +32,65 @@ class USBs:
         return filtered
     
     def compute_serial_to_port_map(filters : dict[str : str]):
+        """
+        returns a dictionary of the form {serial number -> dev port}
+        """
         filt_list = USBs.get_filtered_list(filters)
 
         port_map = {}
         for connection in filt_list:
             port_map[connection['iSerialNumber']] = connection['devname']
         return port_map
+    
+    def plug_in_monitor(usb_names : list = []):
+        """
+        live interaction script that will monitor which devices you plug in and save 
+        their serial numbers in a list in order
+        """
+        prev_status = USBs.discover_all()
+        prev_serial_numbers = [d['iSerialNumber'] for d in prev_status]
+        new_serial_numbers = []
+
+        i = 0
+        while True:
+            if usb_names == []:
+                prompt = 'Add in a USB and hit enter, or press something else and enter to exit'
+            else:
+                prompt = f'Plug in {usb_names[i]}'
+            s = input(prompt)
+
+            if s != '':
+                break
+
+            cur_status = USBs.discover_all()
+            cur_serial_numbers = [d['iSerialNumber'] for d in cur_status]
+
+            res = list(set(cur_serial_numbers) - set(prev_serial_numbers))
+            assert len(res) == 1
+            new_serial_numbers.append(res[0])
+
+            prev_serial_numbers = cur_serial_numbers
+            i += 1
+            if usb_names != [] and i == len(usb_names):
+                break
+
+        return new_serial_numbers
+
+
 
 
 if __name__ == "__main__":
+    ### test plug in monitor
+
+    usb_names = [
+        "MOTOR_0",
+        "MOTOR_1"
+    ]
+    new = USBs.plug_in_monitor(usb_names)
+    print(new)
+    exit()
+    ### test remaining
+
     from pprint import pprint
 
     pprint(USBs.discover_all())
