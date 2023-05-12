@@ -87,7 +87,11 @@ if __name__ == "__main__":
         "MOTOR_1"
     ]
     new = USBs.plug_in_monitor(usb_names)
-    print(new)
+    assert len(new) == len(usb_names)
+
+    mapping = dict(zip(usb_names, new))
+
+    print(mapping)
     exit()
     ### test remaining
 
