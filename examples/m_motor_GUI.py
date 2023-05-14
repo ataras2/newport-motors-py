@@ -19,9 +19,10 @@ import os
 now = datetime.now() # current date and time
 fname = now.strftime("%m_%d_%Y_%H_%M_%S")
 
-logging.basicConfig(filename=os.path.join('logs/', fname+".log"), 
+logging.basicConfig(
+                    # filename=os.path.join('logs/', fname+".log"), 
                     encoding='utf-8', 
-                    level=logging.DEBUG,
+                    level=logging.INFO,
                     format='%(filename)s:%(levelname)s:%(message)s')
 
 run_in_sim = True
@@ -54,7 +55,6 @@ if 'motor1' not in st.session_state:
     st.session_state['motor1'] = M100D(motor1_port, rm)
     st.session_state['motor2'] = M100D(motor2_port, rm)
 
-st.session_state['motor1'].set_absolute_position(0.02, M100D.AXES.U)
 
 col1, col2 = st.columns(2)
 
@@ -105,6 +105,7 @@ def TipTiltMotor():
                                      [InstrumentGUI.get_update_fn('x', motor_key), InstrumentGUI.get_update_fn('y', motor_key)],
                                      st.session_state[motor_key].get_current_pos())
     pos = st.session_state[motor_key].get_current_pos()
+    logging.info(pos)
 
     import plotly.express as px
 

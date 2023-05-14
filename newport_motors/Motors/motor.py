@@ -84,7 +84,7 @@ class M100D(Motor):
             axis (M100D.AXES) : the axis to set
         """
         str_to_write = f'1PA{axis.name}{value}'
-        logging.info("sending", str_to_write)
+        logging.info("sending" + str_to_write)
         self._connection.write(str_to_write)
         self._current_pos[axis] = value
 
