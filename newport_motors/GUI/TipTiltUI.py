@@ -16,7 +16,7 @@ class TipTiltUI:
                                         [TipTiltUI.get_callback('tip_tilt_x', motor_key), 
                                          TipTiltUI.get_callback('tip_tilt_y', motor_key)],
                                         st.session_state[motor_key].get_current_pos(),
-                                        main_bounds=M100D.HW_BOUNDS)
+                                        main_bounds=M100D.HW_BOUNDS[M100D.AXES.V])
         pos = st.session_state[motor_key].get_current_pos()
         logging.info(pos)
 
