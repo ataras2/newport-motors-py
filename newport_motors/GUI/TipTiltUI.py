@@ -15,7 +15,8 @@ class TipTiltUI:
         CustomNumeric.variable_increment(['tip_tilt_x', 'tip_tilt_y'],
                                         [TipTiltUI.get_callback('tip_tilt_x', motor_key), 
                                          TipTiltUI.get_callback('tip_tilt_y', motor_key)],
-                                        st.session_state[motor_key].get_current_pos())
+                                        st.session_state[motor_key].get_current_pos(),
+                                        main_bounds=M100D.HW_BOUNDS)
         pos = st.session_state[motor_key].get_current_pos()
         logging.info(pos)
 
