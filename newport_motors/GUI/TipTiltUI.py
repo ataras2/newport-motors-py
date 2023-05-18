@@ -12,9 +12,9 @@ from newport_motors.Motors.motor import M100D
 class TipTiltUI:
     def main(motor_key : str):
         st.header("Tip/Tilt motor")
-        CustomNumeric.variable_increment(['tip_tilt_x', 'tip_tilt_y'],
-                                        [TipTiltUI.get_callback('tip_tilt_x', motor_key), 
-                                         TipTiltUI.get_callback('tip_tilt_y', motor_key)],
+        CustomNumeric.variable_increment(['tip_tilt_u', 'tip_tilt_v'],
+                                        [TipTiltUI.get_callback('tip_tilt_u', motor_key), 
+                                         TipTiltUI.get_callback('tip_tilt_v', motor_key)],
                                         st.session_state[motor_key].get_current_pos(),
                                         main_bounds=M100D.HW_BOUNDS[M100D.AXES.V])
         pos = st.session_state[motor_key].get_current_pos()
@@ -23,22 +23,22 @@ class TipTiltUI:
         import plotly.express as px
 
         fig = px.scatter(
-            x=np.array([pos[0]]),
-            y=np.array([pos[1]]),
+            x=np.array([pos[1]]),
+            y=np.array([pos[0]]),
         )
         fig.update_layout(
             xaxis_title="x",
             yaxis_title="y",
-            yaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V]),
-            xaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U])
+            yaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V][::-1]),
+            xaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U][::-1])
         )
 
         st.write(fig)
 
     def get_callback(source : str, motor_key : str) -> callable:
-        if source[-1] == 'x':
+        if source[-1] == 'u':
             axis = M100D.AXES.U
-        elif source[-1] == 'y':
+        elif source[-1] == 'v':
             axis = M100D.AXES.V
         else:
             raise NotImplementedError()

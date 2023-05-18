@@ -26,14 +26,24 @@ logging.basicConfig(
                     level=logging.INFO,
                     format='%(filename)s:%(levelname)s: %(message)s')
 
-run_in_sim = True
-
+run_in_sim = False
 
 
 st.set_page_config(layout="wide")
 
-st.title('Motor control for Heimdallr')
+st.title('Motor control for Heimdallr alignment')
 
+# instrument_motor_config = [
+#     {
+        
+#     }
+# ]
+
+def create_motor_sim():
+    pass
+
+def open_motor_connections():
+    pass
 
 if 'motor1' not in st.session_state:
     if run_in_sim:
@@ -52,12 +62,14 @@ if 'motor1' not in st.session_state:
     else:
         motor1_port = 'ASRL/dev/ttyUSB0::INSTR'
         motor2_port = 'ASRL/dev/ttyUSB1::INSTR'
-        rm = pyvisa.ResourceManager(visa_library="@-py")
+        rm = pyvisa.ResourceManager(visa_library="@_py")
 
 
     st.session_state['motor1'] = M100D(motor1_port, rm)
     st.session_state['motor2'] = M100D(motor2_port, rm)
-    st.session_state['motor3'] = LS16P(motor3_port, rm)
+    st.session_state['motor1'].set_to_zero()
+    st.session_state['motor2'].set_to_zero()
+    # st.session_state['motor3'] = LS16P(motor3_port, rm)
 
 
 col1, col2 = st.columns(2)
@@ -79,15 +91,15 @@ else:
 
 col1, col2 = st.columns(2)
 
-with col1:
-    LinearUI.main('motor3')
+# with col1:
+#     LinearUI.main('motor3')
     
 
 
 
 
 with col2:
-    TipTiltUI.main('motor1')
+    TipTiltUI.main(motor_key)
 #    beam = st.selectbox("Pick a component", list(range(1,5)))
 
 
