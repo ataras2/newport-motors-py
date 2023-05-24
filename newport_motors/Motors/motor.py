@@ -25,6 +25,13 @@ class Motor:
     
     def _verify_valid_connection(self):
         raise NotImplementedError()
+    
+    def write_str(self, str_to_write):
+        self._connection.write(str_to_write)
+    
+    def query_str(self, str_to_write):
+        return_str = self._connection.query(str_to_write).strip()
+        return return_str
 
 
 class M100D(Motor):
@@ -87,6 +94,7 @@ class M100D(Motor):
         logging.info("sending" + str_to_write)
         self._connection.write(str_to_write)
         self._current_pos[axis] = value
+
 
 
 class LS16P(Motor):
