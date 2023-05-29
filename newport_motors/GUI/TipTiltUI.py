@@ -23,14 +23,14 @@ class TipTiltUI:
         import plotly.express as px
 
         fig = px.scatter(
-            x=np.array([pos[1]]),
-            y=np.array([pos[0]]),
+            x=np.array([pos[0]]),
+            y=np.array([pos[1]]),
         )
         fig.update_layout(
-            xaxis_title="x",
-            yaxis_title="y",
-            yaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V][::-1]),
-            xaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U][::-1])
+            xaxis_title="v",
+            yaxis_title="u",
+            xaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U][::]),
+            yaxis = dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V][::])
         )
 
         st.write(fig)

@@ -26,7 +26,7 @@ logging.basicConfig(
                     level=logging.INFO,
                     format='%(filename)s:%(levelname)s: %(message)s')
 
-run_in_sim = False
+run_in_sim = True
 
 
 st.set_page_config(layout="wide")
