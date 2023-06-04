@@ -6,7 +6,7 @@ class USBs:
     A calss that manages usb connections and can filter particular devices
     Useful to get the mapping serial number -> devname e.g. 12345-> /dev/ttyUSB0
     """
-
+    
     def discover_all():
         return usbinfo.usbinfo()
     

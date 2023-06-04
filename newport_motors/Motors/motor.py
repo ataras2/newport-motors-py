@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # example code:
     # Open a connection to a M100D on ttyUSB0,
     # verify the AXES attributes, read a position and set a position
-    tt = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager())
+    tt = M100D('ASRL/dev/ttyUSB0::INSTR', pyvisa.ResourceManager(visa_library="@_py"))
     print(tt.AXES.U.name)
     print(tt.read_pos(tt.AXES.U))
     tt.set_absolute_position(0., tt.AXES.U)
