@@ -6,11 +6,12 @@ class USBs:
     A calss that manages usb connections and can filter particular devices
     Useful to get the mapping serial number -> devname e.g. 12345-> /dev/ttyUSB0
     """
-    
-    def discover_all():
+    @classmethod
+    def discover_all(cls):
         return usbinfo.usbinfo()
     
-    def get_filtered_list(filters : dict[str : str], tty_only : bool=True):
+    @classmethod
+    def get_filtered_list(cls, filters : dict[str, str], tty_only : bool=True):
         """
         get a list of the usb properties for relevant devices
 
@@ -31,7 +32,8 @@ class USBs:
                 filtered.append(connection)
         return filtered
     
-    def compute_serial_to_port_map(filters : dict[str : str]):
+    @classmethod
+    def compute_serial_to_port_map(cls, filters : dict[str, str]):
         """
         returns a dictionary of the form {serial number -> dev port}
         """
@@ -42,7 +44,8 @@ class USBs:
             port_map[connection['iSerialNumber']] = connection['devname']
         return port_map
     
-    def plug_in_monitor(usb_names : list = []):
+    @classmethod
+    def plug_in_monitor(cls, usb_names : list = []):
         """
         live interaction script that will monitor which devices you plug in and save 
         their serial numbers in a list in order
