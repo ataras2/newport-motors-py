@@ -12,8 +12,7 @@ class Instrument:
     def _name_to_port(self,config_path):
         motor_map = Instrument._read_motor_mapping(config_path)
         filt = {
-            'iManufacturer' : 'Newport',
-            # 'iSerialNumber' : 'A67BVBOJ'
+            'iManufacturer' : 'Newport'
         }
         serial_to_port = USBs.compute_serial_to_port_map(filt)
         name_to_port = {}
@@ -39,8 +38,29 @@ class Instrument:
             config = json.load(f)
         return config
 
+    @classmethod
+    def _validate_config_file(cls, config_path):
+        """
+        Reads in the config file and verifies that it is valid
+        """
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+        
+
+        for component in config:
+            if 'component' not in component:
+                raise ValueError('Each component must have a name')
+            if 'serial_number' not in component:
+                raise ValueError('Each component must have a serial number')
+            if 'orientation' not in component:
+                raise ValueError('Each component must have a orientation flag')
+            
+            if component['orientation'] not in ["normal", "reversed"]:
+                raise ValueError('The orientation flag must be one of "normal", "reversed"')
+
 
 
 if __name__ == '__main__':
     i = Instrument('InstrumentConfigs/Heimdallr2.json')
+    Instrument._validate_config_file('InstrumentConfigs/Heimdallr2.json')
     print(i.name_to_port)
