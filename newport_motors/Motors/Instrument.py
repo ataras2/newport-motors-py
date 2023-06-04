@@ -2,11 +2,17 @@ import json
 from newport_motors.USBs.USBs import USBs
 import logging
 
+from newport_motors.Motors.motor import M100D
+
 class Instrument:
     """
-    A collection of motors
+    A class to represent a collection of motors that are connected to the same device
     """
     def __init__(self, config_path) -> None:
+        """
+        config_path: path to the config file for this instrument
+        """
+        Instrument._validate_config_file(config_path)
         self._name_to_port_mapping = self._name_to_port(config_path)
     
     def _name_to_port(self,config_path):
@@ -31,7 +37,12 @@ class Instrument:
         return self._name_to_port_mapping
 
     def open_conncetions(self):
-        pass
+        """
+        For each instrument in the config file, open all the connections and create relevant motor objects
+        """
+        for name, port in self.name_to_port.items():
+            pass
+        
 
     def _read_motor_mapping(config_path):
         with open(config_path, 'r') as f:
@@ -52,12 +63,16 @@ class Instrument:
                 raise ValueError('Each component must have a name')
             if 'serial_number' not in component:
                 raise ValueError('Each component must have a serial number')
-            if 'orientation' not in component:
-                raise ValueError('Each component must have a orientation flag')
-            
-            if component['orientation'] not in ["normal", "reversed"]:
-                raise ValueError('The orientation flag must be one of "normal", "reversed"')
+            if 'motor_type' not in component:
+                raise ValueError('Each component must have a motor type')
 
+            if component['motor_type'] in ["M100D"]:
+                M100D.validate_config(component["motor_config"])
+
+        # check that all component names are unique:
+        names = [component['component'] for component in config]
+        if len(names) != len(set(names)):
+            raise ValueError('All component names must be unique')
 
 
 if __name__ == '__main__':

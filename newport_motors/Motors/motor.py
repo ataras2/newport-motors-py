@@ -33,6 +33,14 @@ class Motor:
         return_str = self._connection.query(str_to_write).strip()
         return return_str
 
+    @classmethod
+    def validate_config(cls, config):
+        """
+        Validate the config dictionary for the motor
+        """
+        if 'orientation' not in config:
+            raise KeyError('orientation not in config')
+        
 
 class M100D(Motor):
     """
