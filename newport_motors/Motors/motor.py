@@ -18,7 +18,9 @@ class Motor:
     SERIAL_BAUD = 921600
     SERIAL_TERMIN = "\r\n"
 
-    def __init__(self, serial_port: str, resource_manager: pyvisa.ResourceManager):
+    def __init__(
+        self, serial_port: str, resource_manager: pyvisa.ResourceManager, **kwargs
+    ):
         self._serial_port = serial_port
         self.open_connection(resource_manager)
         self._verify_valid_connection()
@@ -50,6 +52,12 @@ class Motor:
         return_str = self._connection.query(str_to_write).strip()
         return return_str
 
+    def set_to_zero(self):
+        """
+        Set the motor to the zero position
+        """
+        raise NotImplementedError()
+
     @classmethod
     def validate_config(cls, config):
         """
@@ -68,9 +76,14 @@ class M100D(Motor):
     AXES = Enum("AXES", ["U", "V"])
     HW_BOUNDS = {AXES.U: [-0.75, 0.75], AXES.V: [-0.75, 0.75]}
 
-    def __init__(self, serial_port, resource_manager: pyvisa.ResourceManager) -> None:
+    def __init__(
+        self, serial_port, resource_manager: pyvisa.ResourceManager, **kwargs
+    ) -> None:
         super().__init__(serial_port, resource_manager)
         self._current_pos = {self.AXES.U: 0.0, self.AXES.V: 0.0}
+        # TODO: this needs some thinking about how to implement so that the external interface doesn't notice
+        if "orientation" in kwargs:
+            self._is_reversed = kwargs["orientation"] == "reversed"
 
     def _verify_valid_connection(self):
         """

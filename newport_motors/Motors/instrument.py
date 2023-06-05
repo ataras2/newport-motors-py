@@ -1,8 +1,13 @@
-import json
-from newport_motors.USBs.USBs import USBs
-import logging
+"""
+Classes for Instruments
+"""
 
-from newport_motors.Motors.motor import M100D
+import logging
+import json
+import pyvisa
+
+from newport_motors.USBs.USBs import USBs
+from newport_motors.Motors.motor import M100D, LS16P
 
 
 class Instrument:
@@ -15,15 +20,24 @@ class Instrument:
         config_path: path to the config file for this instrument
         """
         Instrument._validate_config_file(config_path)
-        self._name_to_port_mapping = self._name_to_port(config_path)
+        self._config = Instrument._read_motor_config(config_path)
+        self._name_to_port_mapping = self._name_to_port()
+        self._motors = self._open_conncetions()
 
-    def _name_to_port(self, config_path):
-        motor_map = Instrument._read_motor_mapping(config_path)
+    def zero_all(self):
+        """
+        Zero all the motors
+        """
+        for motor in self._motors:
+            motor.set_to_zero()
+
+    def _name_to_port(self):
         filt = {"iManufacturer": "Newport"}
         serial_to_port = USBs.compute_serial_to_port_map(filt)
         name_to_port = {}
-        for mapping in motor_map:
+        for mapping in self._config:
             serial = mapping["serial_number"]
+            logging.info(f"Searching for serial number {serial}")
             try:
                 name = mapping["component"]
                 port = serial_to_port[serial]
@@ -39,17 +53,34 @@ class Instrument:
         """
         return self._name_to_port_mapping
 
-    def open_conncetions(self):
+    def _open_conncetions(self):
         """
-        For each instrument in the config file, open all the connections and create relevant motor objects
+        For each instrument in the config file, open all the connections and create relevant
+        motor objects
         """
-        for name, port in self.name_to_port.items():
-            pass
+        resource_manager = pyvisa.ResourceManager(visa_library="@_py")
+
+        motors = {}
+
+        for component in self._config:
+            if component["motor_type"] == "M100D":
+                motors[component["name"]] = M100D(
+                    self._name_to_port_mapping[component["name"]], resource_manager
+                )
+            elif component["motor_type"] == "LS16P":
+                motors[component["name"]] = LS16P(
+                    self._name_to_port_mapping[component["name"]], resource_manager
+                )
+
+        return motors
 
     @classmethod
-    def _read_motor_mapping(cls, config_path):
-        with open(config_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
+    def _read_motor_config(cls, config_path):
+        """
+        Read the json config file and return the config dictionary
+        """
+        with open(config_path, "r", encoding="utf-8") as file:
+            config = json.load(file)
         return config
 
     @classmethod
@@ -57,11 +88,11 @@ class Instrument:
         """
         Reads in the config file and verifies that it is valid
         """
-        with open(config_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
+        with open(config_path, "r", encoding="utf-8") as file:
+            config = json.load(file)
 
         for component in config:
-            if "component" not in component:
+            if "name" not in component:
                 raise ValueError("Each component must have a name")
             if "serial_number" not in component:
                 raise ValueError("Each component must have a serial number")
@@ -72,7 +103,7 @@ class Instrument:
                 M100D.validate_config(component["motor_config"])
 
         # check that all component names are unique:
-        names = [component["component"] for component in config]
+        names = [component["name"] for component in config]
         if len(names) != len(set(names)):
             raise ValueError("All component names must be unique")
 
