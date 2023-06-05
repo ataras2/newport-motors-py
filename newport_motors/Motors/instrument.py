@@ -4,6 +4,7 @@ Classes for Instruments
 
 import logging
 import json
+from typing import Any
 import pyvisa
 
 from newport_motors.USBs.USBs import USBs
@@ -52,6 +53,9 @@ class Instrument:
         The dictionary that maps the name of the motor to the port it is connected to
         """
         return self._name_to_port_mapping
+
+    def __getattribute__(self, __name: str) -> Any:
+        return self._motors[__name]
 
     def _open_conncetions(self):
         """
@@ -109,5 +113,6 @@ class Instrument:
 
 
 if __name__ == "__main__":
-    i = Instrument("InstrumentConfigs/Heimdallr2.json")
+    i = Instrument("InstrumentConfigs/Heimdallr_tt_only.json")
     print(i.name_to_port)
+    print(i["Spherical_1_TipTilt"])
