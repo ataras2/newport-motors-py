@@ -8,7 +8,7 @@ from typing import Any
 import pyvisa
 
 from newport_motors.USBs.USBs import USBs
-from newport_motors.Motors.motor import M100D, LS16P
+from newport_motors.Motors.motor import M100D, LS16P, Motor
 
 
 class Instrument:
@@ -54,7 +54,7 @@ class Instrument:
         """
         return self._name_to_port_mapping
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Motor:
         """
         Get a motor by name
         """
@@ -81,7 +81,9 @@ class Instrument:
         for component in self._config:
             visa_port = f"ASRL{self._name_to_port_mapping[component['name']]}::INSTR"
             if component["motor_type"] == "M100D":
-                motors[component["name"]] = M100D(visa_port, resource_manager)
+                motors[component["name"]] = M100D(
+                    visa_port, resource_manager, **component["motor_config"]
+                )
             elif component["motor_type"] == "LS16P":
                 motors[component["name"]] = LS16P(visa_port, resource_manager)
 
@@ -139,3 +141,10 @@ if __name__ == "__main__":
 
     print(i.motors["Spherical_1_TipTilt"])
     print(i["Spherical_1_TipTilt"])
+
+    # print(i["Spherical_1_TipTilt"]._is_reversed)
+    i["Spherical_1_TipTilt"].set_to_zero()
+    import time
+
+    time.sleep(3)
+    i["Spherical_1_TipTilt"].set_absolute_position(0.5, M100D.AXES.U)
