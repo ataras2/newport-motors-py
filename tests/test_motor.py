@@ -23,7 +23,7 @@ class Test_M100D:
         m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
         m.set_absolute_position(0.2, M100D.AXES.U)
 
-        assert m.get_current_pos()[0] == 0.2
+        assert m.get_current_pos[0] == 0.2
 
     def test_read(self):
         m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
@@ -33,12 +33,9 @@ class Test_M100D:
         assert p > -0.75 and p < 0.75
 
 
-
 class Test_LS16P:
     def test_nothing(self):
         pass
 
     def test_ctor(self):
         LS16P("MOCK0::mock2::INSTR", ResourceManager(visa_library="@-mock"))
-
-
