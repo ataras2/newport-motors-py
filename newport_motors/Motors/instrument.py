@@ -40,7 +40,7 @@ class Instrument:
             serial = mapping["serial_number"]
             logging.info(f"Searching for serial number {serial}")
             try:
-                name = mapping["component"]
+                name = mapping["name"]
                 port = serial_to_port[serial]
                 name_to_port[name] = port
             except KeyError:
@@ -54,8 +54,9 @@ class Instrument:
         """
         return self._name_to_port_mapping
 
-    def __getattribute__(self, __name: str) -> Any:
-        return self._motors[__name]
+    @property
+    def motors(self):
+        return self._motors
 
     def _open_conncetions(self):
         """
@@ -67,14 +68,11 @@ class Instrument:
         motors = {}
 
         for component in self._config:
+            visa_port = f"ASRL{self._name_to_port_mapping[component['name']]}::INSTR"
             if component["motor_type"] == "M100D":
-                motors[component["name"]] = M100D(
-                    self._name_to_port_mapping[component["name"]], resource_manager
-                )
+                motors[component["name"]] = M100D(visa_port, resource_manager)
             elif component["motor_type"] == "LS16P":
-                motors[component["name"]] = LS16P(
-                    self._name_to_port_mapping[component["name"]], resource_manager
-                )
+                motors[component["name"]] = LS16P(visa_port, resource_manager)
 
         return motors
 
@@ -111,8 +109,21 @@ class Instrument:
         if len(names) != len(set(names)):
             raise ValueError("All component names must be unique")
 
+    @classmethod
+    def _create_config_with_plugin(cls, config_path):
+        """
+        Using a USB monitor, create a config file with all the motors that are
+        connected one at a time
+
+        config_path: path for where to save the resulting config file
+        """
+        USBs.plug_in_monitor()
+
 
 if __name__ == "__main__":
     i = Instrument("InstrumentConfigs/Heimdallr_tt_only.json")
     print(i.name_to_port)
-    print(i["Spherical_1_TipTilt"])
+
+    # M100D("ASRL/dev/ttyUSB1::INSTR", pyvisa.ResourceManager("@_py"))
+
+    print(i.motors["Spherical_1_TipTilt"])

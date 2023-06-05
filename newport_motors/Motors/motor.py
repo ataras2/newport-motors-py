@@ -90,7 +90,7 @@ class M100D(Motor):
         """
         Verify that the serial connection opened by the class is indeed to to a NEWPORT M100D
         """
-        id_number = self._connection.query("1ID?").strip()  #
+        id_number = self._connection.query("1ID?").strip()
         assert "M100D" in id_number
 
     def _get_axis(self, axis: AXES):
