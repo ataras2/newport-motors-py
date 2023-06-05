@@ -38,10 +38,16 @@ class Motor:
         raise NotImplementedError()
 
     def write_str(self, str_to_write):
-        self._connection.write(str_to_write)  #
+        """
+        Write a string through serial and do not expect anything to be returned
+        """
+        self._connection.write(str_to_write)
 
     def query_str(self, str_to_write):
-        return_str = self._connection.query(str_to_write).strip()  #
+        """
+        Send a query through serial and return the response
+        """
+        return_str = self._connection.query(str_to_write).strip()
         return return_str
 
     @classmethod
@@ -75,6 +81,9 @@ class M100D(Motor):
 
     @property
     def get_current_pos(self):
+        """
+        Return the current position of the motor in degrees
+        """
         return [self._current_pos[ax] for ax in M100D.AXES]
 
     def set_to_zero(self):
