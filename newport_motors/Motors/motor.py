@@ -4,8 +4,8 @@ Module for the newport motors.
 
 from enum import Enum
 import logging
-import parse
 from typing import Literal
+import parse
 
 import pyvisa
 
@@ -19,9 +19,7 @@ class Motor:
     SERIAL_BAUD = 921600
     SERIAL_TERMIN = "\r\n"
 
-    def __init__(
-        self, serial_port: str, resource_manager: pyvisa.ResourceManager, **kwargs
-    ):
+    def __init__(self, serial_port: str, resource_manager: pyvisa.ResourceManager):
         self._serial_port = serial_port
         self.open_connection(resource_manager)
         self._verify_valid_connection()
