@@ -54,8 +54,19 @@ class Instrument:
         """
         return self._name_to_port_mapping
 
+    def __getitem__(self, key):
+        """
+        Get a motor by name
+        """
+        if key not in self._motors:
+            raise KeyError(f"Could not find motor {key}")
+        return self._motors[key]
+
     @property
     def motors(self):
+        """
+        the motors of the string
+        """
         return self._motors
 
     def _open_conncetions(self):
@@ -127,3 +138,4 @@ if __name__ == "__main__":
     # M100D("ASRL/dev/ttyUSB1::INSTR", pyvisa.ResourceManager("@_py"))
 
     print(i.motors["Spherical_1_TipTilt"])
+    print(i["Spherical_1_TipTilt"])
