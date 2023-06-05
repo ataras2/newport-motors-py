@@ -5,6 +5,7 @@ Module for the newport motors.
 from enum import Enum
 import logging
 import parse
+from typing import Literal
 
 import pyvisa
 
@@ -77,13 +78,15 @@ class M100D(Motor):
     HW_BOUNDS = {AXES.U: [-0.75, 0.75], AXES.V: [-0.75, 0.75]}
 
     def __init__(
-        self, serial_port, resource_manager: pyvisa.ResourceManager, **kwargs
+        self,
+        serial_port,
+        resource_manager: pyvisa.ResourceManager,
+        orientation: Literal["normal", "reversed"] = "normal",
     ) -> None:
         super().__init__(serial_port, resource_manager)
         self._current_pos = {self.AXES.U: 0.0, self.AXES.V: 0.0}
         # TODO: this needs some thinking about how to implement so that the external interface doesn't notice
-        if "orientation" in kwargs:
-            self._is_reversed = kwargs["orientation"] == "reversed"
+        self._is_reversed = orientation == "reversed"
 
     def _verify_valid_connection(self):
         """
@@ -92,12 +95,23 @@ class M100D(Motor):
         id_number = self._connection.query("1ID?").strip()  #
         assert "M100D" in id_number
 
+    def _get_axis(self, axis: AXES):
+        """
+        Get the axis and apply the reverse flag if needed
+        """
+        if self._is_reversed:
+            if axis == self.AXES.U:
+                axis = self.AXES.V
+            elif axis == self.AXES.V:
+                axis = self.AXES.U
+        return axis
+
     @property
     def get_current_pos(self):
         """
         Return the current position of the motor in degrees
         """
-        return [self._current_pos[ax] for ax in M100D.AXES]
+        return [self._current_pos[self._get_axis(ax)] for ax in M100D.AXES]
 
     def set_to_zero(self):
         """
@@ -116,6 +130,7 @@ class M100D(Motor):
         Returns:
             position (float) : the position of the axis in degrees
         """
+        axis = self._get_axis(axis)
         return_str = self._connection.query(f"1TP{axis.name}").strip()
         subset = parse.parse("{}" + f"TP{axis.name}" + "{}", return_str)
         if subset is not None:
@@ -130,6 +145,7 @@ class M100D(Motor):
             value (float) : The new position in degrees
             axis (M100D.AXES) : the axis to set
         """
+        axis = self._get_axis(axis)
         str_to_write = f"1PA{axis.name}{value}"
         logging.info(f"sending {str_to_write}")
         self._connection.write(str_to_write)
@@ -178,6 +194,12 @@ class LS16P(Motor):
         if subset is not None:
             return float(subset[1])
         raise ValueError(f"Could not parse {return_str}")
+
+    def set_to_zero(self):
+        """
+        Set the motor to the zero position
+        """
+        self.set_absolute_position(0.0)
 
     @property
     def get_current_pos(self):
