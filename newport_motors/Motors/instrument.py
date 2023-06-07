@@ -140,11 +140,11 @@ if __name__ == "__main__":
     # M100D("ASRL/dev/ttyUSB1::INSTR", pyvisa.ResourceManager("@_py"))
 
     print(i.motors["Spherical_1_TipTilt"])
-    print(i["Spherical_1_TipTilt"])
+    print(i["Spherical_1_TipTilt"]._is_reversed)
 
-    # print(i["Spherical_1_TipTilt"]._is_reversed)
-    i["Spherical_1_TipTilt"].set_to_zero()
-    import time
+    # # print(i["Spherical_1_TipTilt"]._is_reversed)
+    # i["Spherical_1_TipTilt"].set_to_zero()
+    # import time
 
-    time.sleep(3)
-    i["Spherical_1_TipTilt"].set_absolute_position(0.5, M100D.AXES.U)
+    # time.sleep(3)
+    # i["Spherical_1_TipTilt"].set_absolute_position(0.5, M100D.AXES.U)

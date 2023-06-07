@@ -81,10 +81,29 @@ class M100D(Motor):
         resource_manager: pyvisa.ResourceManager,
         orientation: Literal["normal", "reversed"] = "normal",
     ) -> None:
+        """
+        A class for the tip tile M100D motors
+
+        Parameters:
+        -----------
+        serial_port: str
+            The serial port that the motor is connected to
+        resource_manager: pyvisa.ResourceManager
+            The resource manager that is used to open the serial connection
+        orientation: str
+            The orientation of the motor. Either "normal" or "reversed". In the case of reversed, the U and V axes are
+            swapped, such that asking a function to move the U axis will actually move the V axis and vice versa.
+            This correctly accounts for the flipped sign of the U axis in the reversed orientation.
+        """
         super().__init__(serial_port, resource_manager)
+
+        if orientation not in ["normal", "reverse"]:
+            raise ValueError(
+                f"orientation must be either 'normal' or 'reverse', not {orientation}"
+            )
         self._current_pos = {self.AXES.U: 0.0, self.AXES.V: 0.0}
         # TODO: this needs some thinking about how to implement so that the external interface doesn't notice
-        self._is_reversed = orientation == "reversed"
+        self._is_reversed = orientation == "reverse"
 
     def _verify_valid_connection(self):
         """
@@ -104,12 +123,24 @@ class M100D(Motor):
                 axis = self.AXES.U
         return axis
 
+    def _alter_value(self, axis: AXES, value: float):
+        """
+        if the motor is reversed, then the value for the U axis needs to be flipped
+        the function should always be called after _get_axis i.e. the axis should be already changed
+        """
+        if self._is_reversed and axis == self.AXES.U:
+            return -value
+        return value
+
     @property
     def get_current_pos(self):
         """
         Return the current position of the motor in degrees
         """
-        return [self._current_pos[self._get_axis(ax)] for ax in M100D.AXES]
+        return [
+            self._alter_value(self._get_axis(ax), self._current_pos[self._get_axis(ax)])
+            for ax in M100D.AXES
+        ]
 
     def set_to_zero(self):
         """
@@ -129,10 +160,12 @@ class M100D(Motor):
             position (float) : the position of the axis in degrees
         """
         axis = self._get_axis(axis)
+
         return_str = self._connection.query(f"1TP{axis.name}").strip()
         subset = parse.parse("{}" + f"TP{axis.name}" + "{}", return_str)
+
         if subset is not None:
-            return float(subset[1])
+            return self._alter_value(axis, float(subset[1]))
         raise ValueError(f"Could not parse {return_str}")
 
     def set_absolute_position(self, value: float, axis: AXES):
@@ -144,6 +177,7 @@ class M100D(Motor):
             axis (M100D.AXES) : the axis to set
         """
         axis = self._get_axis(axis)
+        value = self._alter_value(axis, value)
         str_to_write = f"1PA{axis.name}{value}"
         logging.info(f"sending {str_to_write}")
         self._connection.write(str_to_write)
@@ -208,11 +242,31 @@ class LS16P(Motor):
 
 
 if __name__ == "__main__":
+    import time
+
     # example code:
     # Open a connection to a M100D on ttyUSB0,
     # verify the AXES attributes, read a position and set a position
-    tt = M100D("ASRL/dev/ttyUSB0::INSTR", pyvisa.ResourceManager(visa_library="@_py"))
-    print(tt.AXES.U.name)
-    print(tt.read_pos(tt.AXES.U))
+    tt = M100D(
+        "ASRL/dev/ttyUSB0::INSTR",
+        pyvisa.ResourceManager(visa_library="@_py"),
+        orientation="normal",
+    )
+    # tt = M100D(
+    #     "ASRL/dev/ttyUSB1::INSTR",
+    #     pyvisa.ResourceManager(visa_library="@_py"),
+    #     orientation="reverse",
+    # )
+    print(tt.read_pos(tt.AXES.U), tt.read_pos(tt.AXES.V))
+
     tt.set_absolute_position(0.0, tt.AXES.U)
+    tt.set_absolute_position(0.0, tt.AXES.V)
     print(tt.read_pos(tt.AXES.U))
+
+    time.sleep(3)
+
+    tt.set_absolute_position(0.7, tt.AXES.V)
+    # tt.set_absolute_position(0.7, tt.AXES.U)
+
+    time.sleep(3)
+    print(tt.read_pos(tt.AXES.U), tt.read_pos(tt.AXES.V))

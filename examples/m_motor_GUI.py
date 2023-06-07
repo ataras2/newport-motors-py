@@ -78,6 +78,13 @@ with col2:
 
 st.write(f"Currently looking at {component}, beam {beam}")
 
+logging.info(
+    f'Motor 1: {st.session_state["instrument"]["Spherical_1_TipTilt"]._is_reversed}'
+)
+
+logging.info(
+    f'Motor 2: {st.session_state["instrument"]["Spherical_2_TipTilt"]._is_reversed}'
+)
 
 col1, col2 = st.columns(2)
 

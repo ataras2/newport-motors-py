@@ -35,14 +35,15 @@ class TipTiltUI:
         import plotly.express as px
 
         fig = px.scatter(
-            x=np.array([pos[0]]),
-            y=np.array([pos[1]]),
+            x=np.array([pos[1]]),
+            y=np.array([pos[0]]),
         )
         fig.update_layout(
-            xaxis_title="v",
-            yaxis_title="u",
-            xaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.U][::]),
-            yaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.V][::]),
+            xaxis_title="v [deg]",
+            yaxis_title="u [deg]",
+            title="Current position reflection of on axis source",
+            xaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.V][::-1]),
+            yaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.U][::-1]),
         )
 
         st.write(fig)
@@ -60,7 +61,7 @@ class TipTiltUI:
 
         def fn():
             logging.info(
-                f"sending {st.session_state[source]} to {st.session_state.component}"
+                f"sending {st.session_state[source]} to {st.session_state.component}, axis {axis}"
             )
             motor.set_absolute_position(st.session_state[source], axis)
 
