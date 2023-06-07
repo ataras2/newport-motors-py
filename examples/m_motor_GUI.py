@@ -5,6 +5,7 @@ import numpy as np
 from newport_motors.Motors.motor import M100D, LS16P
 from newport_motors.GUI.TipTiltUI import TipTiltUI
 from newport_motors.GUI.LinearUI import LinearUI
+from newport_motors.Motors.instrument import Instrument
 
 import pyvisa
 
@@ -63,15 +64,17 @@ if "motor1" not in st.session_state:
         register_resource(motor3_port, Mock_LS16P())
 
         resource_manager = pyvisa.ResourceManager(visa_library="@-mock")
+
+        raise NotImplementedError()
     else:
-        motor1_port = "ASRL/dev/ttyUSB0::INSTR"
-        motor2_port = "ASRL/dev/ttyUSB1::INSTR"
+        i = Instrument("InstrumentConfigs/Heimdallr_tt_only.json")
         resource_manager = pyvisa.ResourceManager(visa_library="@_py")
 
-    st.session_state["motor1"] = M100D(motor1_port, resource_manager)
-    st.session_state["motor2"] = M100D(motor2_port, resource_manager)
-    st.session_state["motor1"].set_to_zero()
-    st.session_state["motor2"].set_to_zero()
+    st.session_state["instrument"] = i
+    # st.session_state["motor1"] = M100D(motor1_port, resource_manager)
+    # st.session_state["motor2"] = M100D(motor2_port, resource_manager)
+    # st.session_state["motor1"].set_to_zero()
+    # st.session_state["motor2"].set_to_zero()
     # st.session_state['motor3'] = LS16P(motor3_port, resource_manager)
 
 
@@ -79,7 +82,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     component = st.selectbox(
-        "Pick a component", ["OAP1", "Spherical mirror", "Knife edge"], key="component"
+        "Pick a component", ["OAP1", "Spherical", "Knife_edge"], key="component"
     )
 
 with col2:
@@ -87,11 +90,6 @@ with col2:
 
 
 st.write(f"Currently looking at {component}, beam {beam}")
-
-if beam > 1:
-    motor_key = "motor2"
-else:
-    motor_key = "motor1"
 
 
 col1, col2 = st.columns(2)
@@ -101,5 +99,5 @@ col1, col2 = st.columns(2)
 
 
 with col2:
+    motor_key = f"instrument.{component}_{beam}_TipTilt"
     TipTiltUI.main(motor_key)
-#    beam = st.selectbox("Pick a component", list(range(1,5)))
