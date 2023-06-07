@@ -29,7 +29,7 @@ class Instrument:
         """
         Zero all the motors
         """
-        for motor in self._motors:
+        for name, motor in self._motors.items():
             motor.set_to_zero()
 
     def _name_to_port(self):
@@ -141,6 +141,8 @@ if __name__ == "__main__":
 
     print(i.motors["Spherical_1_TipTilt"])
     print(i["Spherical_1_TipTilt"]._is_reversed)
+
+    i.zero_all()
 
     # # print(i["Spherical_1_TipTilt"]._is_reversed)
     # i["Spherical_1_TipTilt"].set_to_zero()

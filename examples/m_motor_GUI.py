@@ -61,6 +61,9 @@ if "instrument" not in st.session_state:
     # st.session_state['motor3'] = LS16P(motor3_port, resource_manager)
 
 
+if st.button("Reset all motors"):
+    st.session_state["instrument"].zero_all()
+
 col1, col2 = st.columns(2)
 
 with col1:
