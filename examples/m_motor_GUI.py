@@ -9,9 +9,6 @@ from newport_motors.Motors.instrument import Instrument
 
 import pyvisa
 
-# TODO: have persistence when dropdowns are changed
-# TODO: Add axes labels, titles
-# TODO: add tip/tilt scatter with colours going backwards in time
 
 import logging
 
@@ -28,29 +25,15 @@ logging.basicConfig(
     format="%(filename)s:%(levelname)s: %(message)s",
 )
 
-run_in_sim = True
+run_in_sim = False
 
 
 st.set_page_config(layout="wide")
 
 st.title("Motor control for Heimdallr alignment")
 
-# instrument_motor_config = [
-#     {
 
-#     }
-# ]
-
-
-def create_motor_sim():
-    pass
-
-
-def open_motor_connections():
-    pass
-
-
-if "motor1" not in st.session_state:
+if "instrument" not in st.session_state:
     if run_in_sim:
         from newport_motors.Mocks.motor import Mock_M100D, Mock_LS16P
         from visa_mock.base.register import register_resource
@@ -82,11 +65,15 @@ col1, col2 = st.columns(2)
 
 with col1:
     component = st.selectbox(
-        "Pick a component", ["OAP1", "Spherical", "Knife_edge"], key="component"
+        # "Pick a component", ["OAP1", "Spherical", "Knife_edge"], key="component"
+        "Pick a component",
+        ["Spherical", "Knife_edge"],
+        key="component",
     )
 
 with col2:
-    beam = st.selectbox("Pick a component", list(range(1, 5)), key="beam")
+    # beam = st.selectbox("Pick a component", list(range(1, 5)), key="beam")
+    beam = st.selectbox("Pick a component", list(range(1, 3)), key="beam")
 
 
 st.write(f"Currently looking at {component}, beam {beam}")
@@ -99,5 +86,6 @@ col1, col2 = st.columns(2)
 
 
 with col2:
-    motor_key = f"instrument.{component}_{beam}_TipTilt"
-    TipTiltUI.main(motor_key)
+    # motor_key = f"instrument.{component}_{beam}_TipTilt"
+    motor = st.session_state["instrument"][f"{component}_{beam}_TipTilt"]
+    TipTiltUI.main(motor)

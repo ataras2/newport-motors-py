@@ -6,12 +6,12 @@ import logging
 from newport_motors.GUI.CustomNumeric import CustomNumeric
 from newport_motors.GUI.InstrumentGUI import InstrumentGUI
 
-from newport_motors.Motors.motor import M100D
+from newport_motors.Motors.motor import M100D, Motor
 
 
 class TipTiltUI:
     @staticmethod
-    def main(motor_key: str):
+    def main(motor: Motor):
         """
         Create a UI block to control a tip/tilt motor, featuring a numeric input for the increment,
         a numeric input for the absolute position of each axis, and a scatter plot of the current position
@@ -23,13 +23,13 @@ class TipTiltUI:
         CustomNumeric.variable_increment(
             ["tip_tilt_u", "tip_tilt_v"],
             [
-                TipTiltUI.get_callback("tip_tilt_u", motor_key, M100D.AXES.U),
-                TipTiltUI.get_callback("tip_tilt_v", motor_key, M100D.AXES.V),
+                TipTiltUI.get_callback("tip_tilt_u", motor, M100D.AXES.U),
+                TipTiltUI.get_callback("tip_tilt_v", motor, M100D.AXES.V),
             ],
-            st.session_state[motor_key].get_current_pos,
+            motor.get_current_pos,
             main_bounds=M100D.HW_BOUNDS[M100D.AXES.V],
         )
-        pos = st.session_state[motor_key].get_current_pos
+        pos = motor.get_current_pos
         logging.info(pos)
 
         import plotly.express as px
@@ -41,20 +41,20 @@ class TipTiltUI:
         fig.update_layout(
             xaxis_title="v",
             yaxis_title="u",
-            xaxis=dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.U][::]),
-            yaxis=dict(range=st.session_state[motor_key].HW_BOUNDS[M100D.AXES.V][::]),
+            xaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.U][::]),
+            yaxis=dict(range=motor.HW_BOUNDS[M100D.AXES.V][::]),
         )
 
         st.write(fig)
 
     @staticmethod
-    def get_callback(source: str, motor_key: str, axis: M100D.AXES) -> callable:
+    def get_callback(source: str, motor: Motor, axis: M100D.AXES) -> callable:
         """
         Return a callback function to set the absolute position of the motor in a given axis
 
         Parameters:
             source (str) : the key to use to store the value to move to in the session state
-            motor_key (str) : the key to use to store the motor in the session state
+            motor (Motor) : the motor to control
             axis (M100D.AXES) : the axis to set
         """
 
@@ -62,8 +62,6 @@ class TipTiltUI:
             logging.info(
                 f"sending {st.session_state[source]} to {st.session_state.component}"
             )
-            st.session_state[motor_key].set_absolute_position(
-                st.session_state[source], axis
-            )
+            motor.set_absolute_position(st.session_state[source], axis)
 
         return fn

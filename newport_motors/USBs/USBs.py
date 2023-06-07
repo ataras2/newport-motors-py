@@ -93,14 +93,14 @@ class USBs:
 if __name__ == "__main__":
     ### test plug in monitor
 
-    usbs = ["MOTOR_0", "MOTOR_1"]
-    new = USBs.plug_in_monitor(usbs)
-    assert len(new) == len(usbs)
+    # usbs = ["MOTOR_0", "MOTOR_1"]
+    # new = USBs.plug_in_monitor(usbs)
+    # assert len(new) == len(usbs)
 
-    mapping = dict(zip(usbs, new))
+    # mapping = dict(zip(usbs, new))
 
-    print(mapping)
-    exit()
+    # print(mapping)
+    # exit()
     ### test remaining
 
     from pprint import pprint
