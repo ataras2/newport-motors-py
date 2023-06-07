@@ -21,10 +21,10 @@ class TipTiltUI:
         """
         st.header("Tip/Tilt motor")
         CustomNumeric.variable_increment(
-            ["tip_tilt_u", "tip_tilt_v"],
+            ["U", "V"],
             [
-                TipTiltUI.get_callback("tip_tilt_u", motor, M100D.AXES.U),
-                TipTiltUI.get_callback("tip_tilt_v", motor, M100D.AXES.V),
+                TipTiltUI.get_callback("U", motor, M100D.AXES.U),
+                TipTiltUI.get_callback("V", motor, M100D.AXES.V),
             ],
             motor.get_current_pos,
             main_bounds=M100D.HW_BOUNDS[M100D.AXES.V],
