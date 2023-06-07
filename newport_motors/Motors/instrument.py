@@ -18,7 +18,26 @@ class Instrument:
 
     def __init__(self, config_path) -> None:
         """
-        config_path: path to the config file for this instrument
+        Construct an instrument as a collection of motors
+
+        Created by reading in a configuration file that has the following format:
+        [
+            {
+                "name": "Spherical_1_TipTilt",      // internal name
+                "motor_type": "M100D",              // the python type/name of the class
+                "motor_config": {                   // optional args for motor constructor
+                    "orientation": "reverse"
+                },
+                "serial_number": "A67BVBOJ"         // the serial number of the motor
+            },
+            ...
+        ]
+
+
+        Parameters:
+        -----------
+        config_path: str
+            The path to the config file for the instrument
         """
         Instrument._validate_config_file(config_path)
         self._config = Instrument._read_motor_config(config_path)
@@ -29,10 +48,19 @@ class Instrument:
         """
         Zero all the motors
         """
-        for name, motor in self._motors.items():
+        for _, motor in self._motors.items():
             motor.set_to_zero()
 
     def _name_to_port(self):
+        """
+        compute the mapping from the name to the port the motor is connected on
+        e.g. spherical_tip_tilt -> /dev/ttyUSB0
+
+        Returns:
+        --------
+        name_to_port: dict
+            A dictionary that maps the name of the motor to the port it is connected to
+        """
         filt = {"iManufacturer": "Newport"}
         serial_to_port = USBs.compute_serial_to_port_map(filt)
         name_to_port = {}
@@ -65,7 +93,7 @@ class Instrument:
     @property
     def motors(self):
         """
-        the motors of the string
+        the motors dictionary
         """
         return self._motors
 
@@ -73,6 +101,11 @@ class Instrument:
         """
         For each instrument in the config file, open all the connections and create relevant
         motor objects
+
+        Returns:
+        --------
+        motors: dict
+            A dictionary that maps the name of the motor to the motor object
         """
         resource_manager = pyvisa.ResourceManager(visa_library="@_py")
 
@@ -93,6 +126,16 @@ class Instrument:
     def _read_motor_config(cls, config_path):
         """
         Read the json config file and return the config dictionary
+
+        Parameters:
+        -----------
+        config_path: str
+            The path to the config file for the instrument
+
+        returns:
+        --------
+        config: dict
+            The config list of dictionaries
         """
         with open(config_path, "r", encoding="utf-8") as file:
             config = json.load(file)
@@ -102,6 +145,11 @@ class Instrument:
     def _validate_config_file(cls, config_path):
         """
         Reads in the config file and verifies that it is valid
+
+        Parameters:
+        -----------
+        config_path: str
+            The path to the config file for the instrument
         """
         with open(config_path, "r", encoding="utf-8") as file:
             config = json.load(file)
