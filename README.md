@@ -11,7 +11,7 @@ This repo contains code used to drive a large project with many newport motors. 
 This repo is not currently on pypi, so you must install it manually. To do so, clone the repo and run `pip install .` from the root directory. 
 
 ## Usage
-There are a few different use cases for this package
+There are a few different use cases for this package, outlined below.
 
 ### Connecting a single motor
 To connect a single motor, you use the relevant motor class from `newport_motors.motors`. For example, to connect a `newport_motors.motors.Motor` object, you would do the following:
@@ -23,6 +23,17 @@ print(tip_tilt.read_pos(tip_tilt.AXES.U))
 tip_tilt.set_absolute_position(0.0, tip_tilt.AXES.U)
 print(tip_tilt.read_pos(tip_tilt.AXES.U))
 ```
+
+## Simulating a single motor
+To simulate a single motor, you use the relevant motor class from `newport_motors.mocks`. For example, to simulate a `newport_motors.motors.Motor` object, you would do the following:
+```python
+from newport_motors.mocks import Motor
+from visa_mock.base.register import register_resource
+
+motor1_port = "MOCK0::mock1::INSTR"
+register_resource(motor1_port, Mock_M100D())
+```
+Then use the motor as above, but with the port as `motor1_port`.
 
 ### Connecting multiple motors
 To connect multiple motors, you use the `newport_motors.instrument` module. This module contains a class called `Instrument` that is used to connect to multiple motors. To use it, you must first create a config file. This config file is a json file that contains a list of motors and their serial numbers. For example:
