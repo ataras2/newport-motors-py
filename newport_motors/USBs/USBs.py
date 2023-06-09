@@ -9,17 +9,41 @@ class USBs:
     """
     A class that manages usb connections and can filter particular devices
     Useful to get the mapping serial number -> devname e.g. 12345-> /dev/ttyUSB0
+
+    TODO maybe make singleton?
     """
 
-    @classmethod
-    def discover_all(cls):
+    def __init__(self) -> None:
+        cur_status = USBs.discover_all()
+        cur_serial_numbers = [d["iSerialNumber"] for d in cur_status]
+
+        self.serial_numbers = cur_serial_numbers
+
+        print(self.serial_numbers)
+
+    def get_difference(self):
+        """
+        Update the list of USB serial numbers and return the difference since the last call
+        of this function or the constructor
+        """
+        cur_serial_numbers = [d["iSerialNumber"] for d in USBs.discover_all()]
+
+        diff = list(set(self.serial_numbers) - set(cur_serial_numbers))
+        self.serial_numbers = cur_serial_numbers
+
+        print(self.serial_numbers)
+
+        return diff
+
+    @staticmethod
+    def discover_all():
         """
         discover all the usb devices
         """
         return usbinfo.usbinfo()
 
-    @classmethod
-    def get_filtered_list(cls, filters: dict[str, str], tty_only: bool = True):
+    @staticmethod
+    def get_filtered_list(filters: dict[str, str], tty_only: bool = True):
         """
         get a list of the usb properties for relevant devices
 
@@ -40,8 +64,8 @@ class USBs:
                 filtered.append(connection)
         return filtered
 
-    @classmethod
-    def compute_serial_to_port_map(cls, filters: dict[str, str]):
+    @staticmethod
+    def compute_serial_to_port_map(filters: dict[str, str]):
         """
         returns a dictionary of the form {serial number -> dev port}
         """
@@ -52,8 +76,8 @@ class USBs:
             port_map[connection["iSerialNumber"]] = connection["devname"]
         return port_map
 
-    @classmethod
-    def plug_in_monitor(cls, usb_names: list = None):
+    @staticmethod
+    def plug_in_monitor(usb_names: list = None):
         """
         live interaction script that will monitor which devices you plug in and save
         their serial numbers in a list in order
@@ -88,33 +112,3 @@ class USBs:
                 break
 
         return new_serial_numbers
-
-
-if __name__ == "__main__":
-    ### test plug in monitor
-
-    # usbs = ["MOTOR_0", "MOTOR_1"]
-    # new = USBs.plug_in_monitor(usbs)
-    # assert len(new) == len(usbs)
-
-    # mapping = dict(zip(usbs, new))
-
-    # print(mapping)
-    # exit()
-    ### test remaining
-
-    from pprint import pprint
-
-    pprint(USBs.discover_all())
-
-    print()
-
-    filt = {
-        "iManufacturer": "Newport",
-        # 'iSerialNumber' : 'A67BVBOJ'
-    }
-
-    pprint(USBs.get_filtered_list(filt))
-
-    m = USBs.compute_serial_to_port_map(filt)
-    pprint(m)
