@@ -62,8 +62,24 @@ class Motor:
         """
         Validate the config dictionary for the motor
         """
-        if "orientation" not in config:
-            raise KeyError("orientation not in config")
+        pass
+
+    @staticmethod
+    def infer_motor_type(motor_name):
+        """
+        Given the internal name of the motor, attempt to infer the type of the class to instantiate
+        """
+
+        motor_type = None
+        ending = motor_name.split("_")[-1]
+        if ending.lower() == "tiptilt" or ending.lower() == "m100d":
+            motor_type = "M100D"
+        elif ending.lower() == "linear" or ending.lower() == "ls16p":
+            motor_type = "LS16P"
+
+        if motor_type is None:
+            raise KeyError(f"could not infer motor type from {motor_name}")
+        return motor_type
 
 
 class M100D(Motor):
@@ -182,6 +198,15 @@ class M100D(Motor):
         logging.info(f"sending {str_to_write}")
         self._connection.write(str_to_write)
         self._current_pos[axis] = value
+
+    @classmethod
+    def validate_config(cls, config):
+        """
+        Validate the config dictionary for the motor
+        """
+        pass
+        if "orientation" not in config:
+            raise KeyError("orientation not in config")
 
 
 class LS16P(Motor):

@@ -218,7 +218,7 @@ class Instrument:
                 )
 
             if infer_motor_type:
-                motor_type = Instrument._infer_motor_type(motor)
+                motor_type = Motor.infer_motor_type(motor)
 
             conf_to_add["name"] = motor
             conf_to_add["motor_type"] = motor_type
@@ -229,20 +229,3 @@ class Instrument:
 
         with open(config_path, "w") as f:
             json.dump(configs, f)
-
-    @staticmethod
-    def _infer_motor_type(motor_name):
-        """
-        Given the internal name of the motor, attempt to infer the type of the class to instantiate
-        """
-
-        motor_type = None
-        ending = motor_name.split("_")[-1]
-        if ending.lower() == "tiptilt" or ending.lower() == "m100d":
-            motor_type = "M100D"
-        elif ending.lower() == "linear" or ending.lower() == "ls16p":
-            motor_type = "LS16P"
-
-        if motor_type is None:
-            raise KeyError(f"could not infer motor type from {motor_name}")
-        return motor_type
