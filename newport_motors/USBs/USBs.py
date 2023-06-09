@@ -3,6 +3,7 @@ Module for managing USB connections
 """
 
 import usbinfo
+import logging
 
 
 class USBs:
@@ -19,7 +20,7 @@ class USBs:
 
         self.serial_numbers = cur_serial_numbers
 
-        print(self.serial_numbers)
+        logging.info(f"USB port opened, connected to: {self.serial_numbers}")
 
     def get_difference(self):
         """
@@ -31,7 +32,7 @@ class USBs:
         diff = list(set(self.serial_numbers) - set(cur_serial_numbers))
         self.serial_numbers = cur_serial_numbers
 
-        print(self.serial_numbers)
+        logging.info(f"USB port updated, connected to: {self.serial_numbers}")
 
         return diff
 
