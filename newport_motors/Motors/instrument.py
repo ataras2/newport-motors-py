@@ -170,31 +170,79 @@ class Instrument:
         if len(names) != len(set(names)):
             raise ValueError("All component names must be unique")
 
-    @classmethod
-    def _create_config_with_plugin(cls, config_path):
+    @staticmethod
+    def create_config_with_plugin(config_path, motor_names, infer_motor_type=True):
         """
         Using a USB monitor, create a config file with all the motors that are
         connected one at a time
 
         config_path: path for where to save the resulting config file
+        motor_names:
+        infer_motor_type: will use the end of the name to decide which class to instantiate
+
+        e.g. for an input of ["Spherical_1_TipTilt", "Spherical_2_TipTilt"],
+        create a config file such as:
+        [
+            {
+                "name": "Spherical_1_TipTilt",
+                "motor_type": "M100D",
+                "motor_config": {
+                    "orientation": "reverse"
+                },
+                "serial_number": "A67BVBOJ"
+            },
+            {
+                "name": "Spherical_2_TipTilt",
+                "motor_type": "M100D",
+                "motor_config": {
+                    "orientation": "normal"
+                },
+                "serial_number": "A675RRE6"
+            }
+        ]
         """
-        USBs.plug_in_monitor()
+        logging.info("Creating config file, unplug all motors")
+        input("Press enter once all motors have been removed...")
 
+        usb = USBs()
+        configs = []
 
-if __name__ == "__main__":
-    i = Instrument("InstrumentConfigs/Heimdallr_tt_only.json")
-    print(i.name_to_port)
+        for motor in motor_names:
+            conf_to_add = {}
+            input(f"Plug in {motor} and hit enter...")
 
-    # M100D("ASRL/dev/ttyUSB1::INSTR", pyvisa.ResourceManager("@_py"))
+            new_serial = usb.get_difference()
+            if len(new_serial) != 1:
+                raise RuntimeError(
+                    f"Was expecting one new serial device, got {len(new_serial)}"
+                )
 
-    print(i.motors["Spherical_1_TipTilt"])
-    print(i["Spherical_1_TipTilt"]._is_reversed)
+            if infer_motor_type:
+                motor_type = Instrument._infer_motor_type(motor)
 
-    i.zero_all()
+            conf_to_add["name"] = motor
+            conf_to_add["motor_type"] = motor_type
+            conf_to_add["serial_number"] = new_serial[0]
+            # conf_to_add["motor_config"] = motor_type.get_individual_config()
 
-    # # print(i["Spherical_1_TipTilt"]._is_reversed)
-    # i["Spherical_1_TipTilt"].set_to_zero()
-    # import time
+            configs.append(conf_to_add)
 
-    # time.sleep(3)
-    # i["Spherical_1_TipTilt"].set_absolute_position(0.5, M100D.AXES.U)
+        with open(config_path, "w") as f:
+            json.dump(configs, f)
+
+    @staticmethod
+    def _infer_motor_type(motor_name):
+        """
+        Given the internal name of the motor, attempt to infer the type of the class to instantiate
+        """
+
+        motor_type = None
+        ending = motor_name.split("_")[-1]
+        if ending.lower() == "tiptilt" or ending.lower() == "m100d":
+            motor_type = "M100D"
+        elif ending.lower() == "linear" or ending.lower() == "ls16p":
+            motor_type = "LS16P"
+
+        if motor_type is None:
+            raise KeyError(f"could not infer motor type from {motor_name}")
+        return motor_type

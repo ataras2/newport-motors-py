@@ -29,7 +29,7 @@ class USBs:
         """
         cur_serial_numbers = [d["iSerialNumber"] for d in USBs.discover_all()]
 
-        diff = list(set(self.serial_numbers) - set(cur_serial_numbers))
+        diff = list(set(cur_serial_numbers) - set(self.serial_numbers))
         self.serial_numbers = cur_serial_numbers
 
         logging.info(f"USB port updated, connected to: {self.serial_numbers}")
