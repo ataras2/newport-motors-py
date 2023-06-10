@@ -41,12 +41,27 @@ class Motor:
     def write_str(self, str_to_write):
         """
         Write a string through serial and do not expect anything to be returned
+
+        Parameters:
+        -----------
+        str_to_write: str
+            The string to write to the serial port
         """
         self._connection.write(str_to_write)
 
     def query_str(self, str_to_write):
         """
         Send a query through serial and return the response
+
+        Parameters:
+        -----------
+        str_to_write: str
+            The string to write to the serial port
+
+        Returns:
+        --------
+        return_str: str
+            The string returned from the serial port
         """
         return_str = self._connection.query(str_to_write).strip()
         return return_str
@@ -72,6 +87,16 @@ class Motor:
     def infer_motor_type(motor_name):
         """
         Given the internal name of the motor, attempt to infer the type of the class to instantiate
+
+        Parameters:
+        -----------
+        motor_name: str
+            The internal name of the motor
+
+        Returns:
+        --------
+        motor_type: type
+            The python type of the motor to instantiate
         """
 
         motor_type = None
@@ -87,6 +112,19 @@ class Motor:
 
     @staticmethod
     def motor_type_to_string(motor_type):
+        """
+        Convert the motor type to a string
+
+        Parameters:
+        -----------
+        motor_type: type
+            The python type of the motor
+
+        Returns:
+        --------
+        motor_str: str
+            The string representation of the motor (to use for e.g. saving to a config file)
+        """
         m = None
         if motor_type == M100D:
             m = "M100D"
@@ -100,6 +138,19 @@ class Motor:
 
     @staticmethod
     def string_to_motor_type(motor_str):
+        """
+        Convert the motor string to a type
+
+        Parameters:
+        -----------
+        motor_str: str
+            The string representation of the motor (to use for e.g. saving to a config file)
+
+        Returns:
+        --------
+        motor_type: Motor
+            The python type of the motor
+        """
         m = None
         if motor_str.lower() == "m100d":
             m = M100D
