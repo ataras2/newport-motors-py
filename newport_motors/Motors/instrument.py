@@ -120,8 +120,8 @@ class Instrument:
             )
         return motors
 
-    @classmethod
-    def _read_motor_config(cls, config_path):
+    @staticmethod
+    def _read_motor_config(config_path):
         """
         Read the json config file and return the config dictionary
 
@@ -139,8 +139,8 @@ class Instrument:
             config = json.load(file)
         return config
 
-    @classmethod
-    def _validate_config_file(cls, config_path):
+    @staticmethod
+    def _validate_config_file(config_path):
         """
         Reads in the config file and verifies that it is valid
 
