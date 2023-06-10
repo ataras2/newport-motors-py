@@ -26,6 +26,12 @@ class USBs:
         """
         Update the list of USB serial numbers and return the difference since the last call
         of this function or the constructor
+
+        Returns:
+        --------
+        diff: list
+            A list of the serial numbers of the devices that have been plugged in since the
+            last call of this function or the constructor
         """
         cur_serial_numbers = [d["iSerialNumber"] for d in USBs.discover_all()]
 
