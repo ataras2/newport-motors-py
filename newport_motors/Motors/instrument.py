@@ -215,6 +215,7 @@ class Instrument:
                     f"Was expecting one new serial device, got {len(new_serial)}"
                 )
 
+            motor_type = Motor
             if infer_motor_type:
                 motor_type = Motor.infer_motor_type(motor)
 
