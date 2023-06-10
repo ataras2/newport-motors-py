@@ -113,13 +113,11 @@ class Instrument:
 
         for component in self._config:
             visa_port = f"ASRL{self._name_to_port_mapping[component['name']]}::INSTR"
-            if component["motor_type"] == "M100D":
-                motors[component["name"]] = M100D(
-                    visa_port, resource_manager, **component["motor_config"]
-                )
-            elif component["motor_type"] == "LS16P":
-                motors[component["name"]] = LS16P(visa_port, resource_manager)
+            motor_class = Motor.string_to_motor_type(component["motor_type"])
 
+            motors[component["motor_type"]] = motor_class(
+                visa_port, resource_manager, **component["motor_config"]
+            )
         return motors
 
     @classmethod
@@ -221,9 +219,9 @@ class Instrument:
                 motor_type = Motor.infer_motor_type(motor)
 
             conf_to_add["name"] = motor
-            conf_to_add["motor_type"] = motor_type
+            conf_to_add["motor_type"] = Motor.motor_type_to_string(motor_type)
             conf_to_add["serial_number"] = new_serial[0]
-            # conf_to_add["motor_config"] = motor_type.setup_individual_config()
+            conf_to_add["motor_config"] = motor_type.setup_individual_config()
 
             configs.append(conf_to_add)
 

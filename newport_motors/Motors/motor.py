@@ -77,13 +77,39 @@ class Motor:
         motor_type = None
         ending = motor_name.split("_")[-1]
         if ending.lower() == "tiptilt" or ending.lower() == "m100d":
-            motor_type = "M100D"
+            motor_type = M100D
         elif ending.lower() == "linear" or ending.lower() == "ls16p":
-            motor_type = "LS16P"
+            motor_type = LS16P
 
         if motor_type is None:
             raise KeyError(f"could not infer motor type from {motor_name}")
         return motor_type
+
+    @staticmethod
+    def motor_type_to_string(motor_type):
+        m = None
+        if motor_type == M100D:
+            m = "M100D"
+        elif motor_type == LS16P:
+            m = "LS16P"
+
+        if m is None:
+            raise ValueError(f"Could not find motor from {motor_type}")
+
+        return m
+
+    @staticmethod
+    def string_to_motor_type(motor_str):
+        m = None
+        if motor_str.lower() == "m100d":
+            m = M100D
+        elif motor_str.lower() == "ls16p":
+            m = LS16P
+
+        if m is None:
+            raise ValueError(f"Could not find motor from {motor_str}")
+
+        return m
 
 
 class M100D(Motor):
@@ -281,6 +307,10 @@ class LS16P(Motor):
         Return the software internal position of the motor
         """
         return self._current_pos
+
+    @staticmethod
+    def setup_individual_config():
+        return {}
 
 
 if __name__ == "__main__":
