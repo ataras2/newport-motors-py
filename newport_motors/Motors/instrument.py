@@ -223,7 +223,7 @@ class Instrument:
             conf_to_add["name"] = motor
             conf_to_add["motor_type"] = motor_type
             conf_to_add["serial_number"] = new_serial[0]
-            # conf_to_add["motor_config"] = motor_type.get_individual_config()
+            # conf_to_add["motor_config"] = motor_type.setup_individual_config()
 
             configs.append(conf_to_add)
 

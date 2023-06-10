@@ -65,6 +65,10 @@ class Motor:
         pass
 
     @staticmethod
+    def setup_individual_config():
+        raise NotImplementedError()
+
+    @staticmethod
     def infer_motor_type(motor_name):
         """
         Given the internal name of the motor, attempt to infer the type of the class to instantiate
@@ -207,6 +211,19 @@ class M100D(Motor):
         pass
         if "orientation" not in config:
             raise KeyError("orientation not in config")
+
+    @staticmethod
+    def setup_individual_config():
+        inp = input("is the motor mounted normally with the text right way up? (Y/N)")
+        orientation = None
+        if inp.lower() == "y":
+            orientation = "normal"
+        elif inp.lower() == "n":
+            orientation = "reverse"
+
+        if orientation is None:
+            raise ValueError(f"invalid input {inp}")
+        return {"orientation": orientation}
 
 
 class LS16P(Motor):
