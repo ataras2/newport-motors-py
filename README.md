@@ -1,4 +1,4 @@
-# newport_motors
+# NewportMotorsPy
 
 ## Purpose
 This repo contains code used to drive a large project with many newport motors. It is split into the following sub modules:
