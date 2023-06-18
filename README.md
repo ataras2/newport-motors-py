@@ -1,5 +1,7 @@
 # NewportMotorsPy
 
+This project is **in no way affiliated with Newport**. 
+
 ## Purpose
 This repo contains code used to drive a large project with many newport motors. It is split into the following sub modules:
  - GUI: generic GUI code using `streamlit` that works well with motor alignment projects
