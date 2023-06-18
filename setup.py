@@ -29,7 +29,7 @@ with open('requirements.txt') as f:
 
 
 setuptools.setup(
-    name="newport_motors",
+    name="newport-motors-py",
     version=find_version("newport_motors", "__init__.py"),
     description="A python package for operating newport motors",
     long_description=long_description,

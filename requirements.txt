@@ -2,6 +2,7 @@ altair==4.2.2
 async-timeout==4.0.2
 attrs==23.1.0
 blinker==1.6.2
+build==0.10.0
 cachetools==5.3.0
 certifi==2022.12.7
 charset-normalizer==3.1.0
@@ -28,7 +29,6 @@ markdown-it-py==2.2.0
 MarkupSafe==2.1.2
 matplotlib==3.7.1
 mdurl==0.1.2
-newport-motors @ file:///home/adam/Documents/Astralis/Asgard/motor_control
 numpy==1.24.3
 packaging==23.1
 pandas==2.0.1
@@ -41,8 +41,11 @@ psutil==5.9.5
 pyarrow==12.0.0
 pydeck==0.8.1b0
 Pygments==2.15.1
+pylint-flask==0.6
+pylint-plugin-utils==0.8.2
 Pympler==1.0.1
 pyparsing==3.0.9
+pyproject_hooks==1.0.0
 pyrsistent==0.19.3
 pyserial==3.5
 pytest==7.3.1
@@ -51,7 +54,6 @@ pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0
 pyudev==0.24.1
 PyVISA==1.13.0
-pyvisa-mock @ file:///home/adam/Documents/Astralis/Asgard/pyvisa-mock
 PyVISA-py==0.6.3
 PyYAML==6.0
 requests==2.29.0
@@ -62,10 +64,8 @@ streamlit==1.22.0
 stringparser==0.6
 tenacity==8.2.2
 toml==0.10.2
-tomli==2.0.1
 toolz==0.12.0
 tornado==6.3.1
-typing_extensions==4.5.0
 tzdata==2023.3
 tzlocal==4.3
 urllib3==1.26.15
