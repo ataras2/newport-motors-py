@@ -5,6 +5,7 @@
 *.egg
 *.egg-info
 dist
+.pypirc
 
 *.png
 *.pdf
