@@ -26,8 +26,8 @@ def find_version(*file_paths):
 
 # DEPENDENCIES
 # 1. What are the required dependencies?
-with open("requirements.txt") as f:
-    install_requires = f.read().splitlines()
+# with open("requirements.txt") as f:
+#     install_requires = f.read().splitlines()
 # 2. What dependencies required to run the unit tests? (i.e. `pytest --remote-data`)
 # tests_require = ['pytest', 'pytest-cov', 'pytest-remotedata']
 
@@ -53,7 +53,16 @@ setuptools.setup(
         "newport_motors/USBs",
         "pyvisa_mock",
     ],
-    install_requires=install_requires,
+    install_requires=[
+        "pytest==7.3.1",
+        "streamlit==1.22.0",
+        "usbinfo==1.1.2",
+        "PyVISA==1.13.0",
+        "PyVISA-py==0.6.3",
+        "PyYAML==6.0",
+        "parse==1.19.0",
+        "visa==1.0.0",
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",

@@ -1,5 +1,5 @@
 name = "newport_motors"
-__version__ = "0.1.0"
+__version__ = "0.1.3"
 
 from . import GUI
 from . import Motors
