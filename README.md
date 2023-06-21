@@ -10,7 +10,7 @@ This repo contains code used to drive a large project with many newport motors. 
  - USBs: usb managment code, used to scan USB ports and identify products from a particular manufacturer
 
 ## Installation
-This repo is not currently on pypi, so you must install it manually. To do so, clone the repo and run `pip install .` from the root directory. 
+This repo is now on PyPi! `pip install newport-motors-py`
 
 ## Usage
 There are a few different use cases for this package, outlined below.
