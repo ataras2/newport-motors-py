@@ -1,10 +1,21 @@
-pytest==7.3.1
-streamlit==1.22.0
-usbinfo==1.1.2
+pytest
+streamlit
+usbinfo
 
-PyVISA==1.13.0
+PyVISA
 # pyvisa-mock @ file:///home/adam/Documents/Astralis/Asgard/pyvisa-mock
-PyVISA-py==0.6.3
-PyYAML==6.0
-parse==1.19.0
-visa==1.0.0
+PyVISA-py
+PyYAML
+parse
+visa
+
+# pytest==7.3.1
+# streamlit==1.22.0
+# usbinfo==1.1.2
+
+# PyVISA==1.13.0
+# # pyvisa-mock @ file:///home/adam/Documents/Astralis/Asgard/pyvisa-mock
+# PyVISA-py==0.6.3
+# PyYAML==6.0
+# parse==1.19.0
+# visa==1.0.0

@@ -51,7 +51,7 @@ setuptools.setup(
         "newport_motors/Motors",
         "newport_motors/Mocks",
         "newport_motors/USBs",
-        "newport_motors/pyvisa_mock",
+        "pyvisa_mock",
     ],
     install_requires=install_requires,
     classifiers=[

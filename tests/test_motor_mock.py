@@ -11,7 +11,7 @@ from newport_motors.Mocks.motor import Mock_M100D, Mock_LS16P
 register_resource("MOCK0::mock1::INSTR", Mock_M100D())
 register_resource("MOCK0::mock2::INSTR", Mock_LS16P())
 
-rc = ResourceManager(visa_library="@-mock")
+rc = ResourceManager(visa_library="@mock")
 M100D_resource = rc.open_resource("MOCK0::mock1::INSTR")
 LS16P_resource = rc.open_resource("MOCK0::mock2::INSTR")
 

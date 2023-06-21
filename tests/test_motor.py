@@ -17,16 +17,16 @@ class Test_M100D:
         pass
 
     def test_ctor(self):
-        M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
+        M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@mock"))
 
     def test_move(self):
-        m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
+        m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@mock"))
         m.set_absolute_position(0.2, M100D.AXES.U)
 
         assert m.get_current_pos[0] == 0.2
 
     def test_read(self):
-        m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@-mock"))
+        m = M100D("MOCK0::mock1::INSTR", ResourceManager(visa_library="@mock"))
         p = m.read_pos(M100D.AXES.U)
 
         assert isinstance(p, float)
@@ -38,4 +38,4 @@ class Test_LS16P:
         pass
 
     def test_ctor(self):
-        LS16P("MOCK0::mock2::INSTR", ResourceManager(visa_library="@-mock"))
+        LS16P("MOCK0::mock2::INSTR", ResourceManager(visa_library="@mock"))

@@ -95,9 +95,8 @@ fi
 Since this has `sudo` commands, you will need to enter your password the first time you open a new terminal.
 
 ## Sim mode:
-Uses https://github.com/microsoft/pyvisa-mock
+Uses https://github.com/microsoft/pyvisa-mock. If you wish to use it you must install it from source (and possibly change `python_requires` in `setup.py`). 
 
-## install
-To use the sim env with pyvisa mock, you must manually change a line in the pyvisa file to correctly find the mock package. Change line 2820 in `highlevel.py` to use "pyvisa" instead of "pyvisa_". Then, when running in sim, create the resource manager like `pyvisa.ResourceManager(visa_library="@-mock")` and if for real use `pyvisa.ResourceManager(visa_library="@-py")`
+The pyvisa_mock package is defined in this package and is correctly re-exported with `pip install .`. 
 
 
