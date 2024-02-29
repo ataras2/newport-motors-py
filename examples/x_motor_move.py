@@ -16,10 +16,12 @@ inst = resource_manager.open_resource(
 # pos = inst.query('01PA?').strip()
 # print(pos)
 
+inst.write("1RS")
+
 pos = inst.query("1TPU").strip()
 print(pos)
 
-inst.write("1PAU-0.5")
+inst.write("1PAU0.5")
 
 time.sleep(1)
 

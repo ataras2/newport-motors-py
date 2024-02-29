@@ -9,6 +9,6 @@ mapping = USBs.compute_serial_to_port_map({"iManufacturer": "Newport"})
 
 pprint(mapping)
 
-m = M100D(port, pyvisa.ResourceManager(visa_library="@_py"))
+m = M100D(port, pyvisa.ResourceManager())
 
 print(f"position: {m.read_pos(M100D.AXES.U)}, {m.read_pos(M100D.AXES.V)}")

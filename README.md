@@ -12,6 +12,12 @@ This repo contains code used to drive a large project with many newport motors. 
 ## Installation
 This repo is now on PyPi! `pip install newport-motors-py`
 
+# bcb note: 20/2/24 - fixed issue that pyvisa.ResourceManager() could not find linear motors by installing (ttyUSB0 not showing up issue)
+>pip install Psutil
+>pip install zeroconf
+then pyvisa.ResourceManager() returns ["ASRL/dev/ttyUSB0::INSTR"] when linear motor is powered on with USB connected.  Added "newport-motors-py/examples/linear_motor_jog.py" to test this.
+
+
 ## Usage
 There are a few different use cases for this package, outlined below.
 
